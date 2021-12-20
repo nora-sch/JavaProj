@@ -9,24 +9,18 @@ public class Classe{
 	int nbEleves;
 	Parent[] parents = new Parent[20];
 
-	//	public Classe() {
-	//	    nbEleves = 0;
-	//		eleves  = new Eleve[NB_MAX];
-	//	
-	//	}
-
-	public Classe(String nomClasse) {
-		//		this();
-		this.nomClasse = nomClasse;
+	public Classe() {
 		nbEleves = 0;
 		eleves  = new Eleve[NB_MAX];
 
+	}
+
+	public Classe(String nomClasse) {
+		this();
+		this.nomClasse = nomClasse;
 
 	}
 
-	/**
-	 * @return the instituteur
-	 */
 	public Instituteur getInstituteur() {
 		return instituteur;
 	}

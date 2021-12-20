@@ -5,10 +5,14 @@ import java.time.LocalDate;
 public class Eleve extends Personne {
 	Parent referent;
 	Classe classe;
-	
+
+	public Eleve() {
+		super();
+	}
+
 	public Eleve(String nom, String prenom, String adresse, LocalDate dateNaissance) {
 		super(nom, prenom, adresse, dateNaissance);
-				
+
 	}
 
 	/**
@@ -38,7 +42,7 @@ public class Eleve extends Personne {
 	public void setClasse(Classe classe) {
 		this.classe = classe;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Eleve [referent=" + referent + "]";

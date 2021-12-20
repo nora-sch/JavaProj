@@ -8,6 +8,10 @@ public class Personne {
 	private String adresse;
 	private LocalDate dateNaissance;
 
+	public Personne() {
+
+	}
+
 	public Personne(String nom, String prenom, String adresse, LocalDate dateNaissance) {
 		this.nom = nom;
 		this.prenom = prenom;

@@ -138,7 +138,7 @@ public class Demonstration {
 		System.out.println("\nPARENTS DE LA CLASSE ROUGE");
 		Parent[] lstParent = classeRouge.getListParent();
 		int i = 0;
-		
+
 		while (i < lstParent.length && lstParent[i] != null) {
 			Parent p = lstParent[i++];
 			System.out.println(p.getPrenom() + " " + p.getNom());
