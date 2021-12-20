@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import fr.eni.ecole.gestionGroupeEleves.Instituteur;
-import fr.eni.ecole.gestionGroupeEleves.Parent;
-import fr.eni.ecole.gestionGroupeEleves.Eleve;
-import fr.eni.ecole.gestionGroupeEleves.ClasseException;
-import fr.eni.ecole.gestionGroupeEleves.Classe;
+import fr.eni.ecole.gestionGroupeEleves.entite.Classe;
+import fr.eni.ecole.gestionGroupeEleves.entite.ClasseException;
+import fr.eni.ecole.gestionGroupeEleves.entite.Eleve;
+import fr.eni.ecole.gestionGroupeEleves.entite.Instituteur;
+import fr.eni.ecole.gestionGroupeEleves.entite.Parent;
 
 public class Demonstration {
 

@@ -1,4 +1,4 @@
-package fr.eni.ecole.gestionGroupeEleves;
+package fr.eni.ecole.gestionGroupeEleves.entite;
 
 import java.time.LocalDate;
 
@@ -8,5 +8,7 @@ public class Instituteur extends Personne {
 		super(nom, prenom, adresse, dateNaissance);
 
 	}
+
+
 
 }

@@ -1,4 +1,4 @@
-package fr.eni.ecole.gestionGroupeEleves;
+package fr.eni.ecole.gestionGroupeEleves.entite;
 
 public class ClasseException extends Exception{
 	private static final long serialVersionUID = 1L;
