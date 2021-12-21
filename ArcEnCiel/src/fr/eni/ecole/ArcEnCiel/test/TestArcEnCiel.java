@@ -44,10 +44,10 @@ public class TestArcEnCiel {
 		System.out.println("Vérification de l'instance qui suit orange -- " + suivanteOrange);
 		
 		
-//		System.out.println("\n-----------------------------------------------------");
-//		System.out.println("Etape 3 -- Affichage de toutes les valeurs");
-//		System.out.println("-----------------------------------------------------");
-//		ArcEnCiel.afficheToutArcEnCiel();
-//	
+		System.out.println("\n-----------------------------------------------------");
+		System.out.println("Etape 3 -- Affichage de toutes les valeurs");
+		System.out.println("-----------------------------------------------------");
+		ArcEnCiel.afficheToutArcEnCiel();
+	
 	}
 }

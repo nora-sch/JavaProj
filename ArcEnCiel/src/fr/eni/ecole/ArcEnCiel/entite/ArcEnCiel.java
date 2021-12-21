@@ -12,15 +12,28 @@ public enum ArcEnCiel {
 			return ORANGE;
 		}
 	}
-	
+
 	public static ArcEnCiel suivante(ArcEnCiel couleur){
 		int pos = couleur.ordinal();  
-
 		int nextPos = pos+1;
 		if (nextPos >= ArcEnCiel.values().length){
 			nextPos = 0;
 		}
 		return ArcEnCiel.values()[nextPos];
 	}
+
+	public static void afficheToutArcEnCiel(){
+		StringBuffer result = new StringBuffer();
+		result.append("[");
+		for(ArcEnCiel v:ArcEnCiel.values()){  
+			if (v.ordinal() == ArcEnCiel.values().length-1){
+				result.append(v);
+			}else{
+				result.append(v).append("; ");
+			}
+		}
+		result.append("]");
+		System.out.println(result.toString());
+			}
 
 }
