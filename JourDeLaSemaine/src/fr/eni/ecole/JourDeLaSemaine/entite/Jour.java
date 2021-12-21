@@ -35,12 +35,6 @@ public enum Jour {
 		}
 		return Jour.values()[nextPos];
 	}
-	public boolean isEstTravaille() {
-		return estTravaille;
-	}
-	public void setEstTravaille(boolean estTravaille) {
-		this.estTravaille = estTravaille;
-	}
 
 	@Override
 	public String toString() {
