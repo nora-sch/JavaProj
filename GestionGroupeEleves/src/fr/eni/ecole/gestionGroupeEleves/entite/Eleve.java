@@ -2,7 +2,7 @@ package fr.eni.ecole.gestionGroupeEleves.entite;
 
 import java.time.LocalDate;
 
-public class Eleve extends Personne {
+public class Eleve extends Personne implements Comparable<Eleve> {
 	Parent referent;
 	Classe classe;
 
@@ -46,6 +46,10 @@ public class Eleve extends Personne {
 	@Override
 	public String toString() {
 		return "Eleve [referent=" + referent + "]";
+	}
+	@Override
+	public int compareTo(Eleve eleve) {
+		return this.getPrenom().compareTo(eleve.getPrenom());
 	}
 
 }

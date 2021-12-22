@@ -1,17 +1,22 @@
 package fr.eni.ecole.gestionGroupeEleves.entite;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class Classe{
 
 	private final int NB_MAX = 20;
 	String nomClasse;
 	Instituteur instituteur;
-	Eleve[] eleves;
-	int nbEleves;
-	Parent[] parents = new Parent[20];
+	//	Eleve[] eleves = new Eleve[NB_MAX];
+	//	int nbEleves;
+	//	Parent[] parents = new Parent[NB_MAX];
+	List<Eleve> eleves = new ArrayList<Eleve>();
+	List<Parent> parents = new ArrayList<Parent>();
 
 	public Classe() {
-		nbEleves = 0;
-		eleves  = new Eleve[NB_MAX];
 
 	}
 
@@ -21,102 +26,99 @@ public class Classe{
 
 	}
 
+	// getters et setters
+
+
 	public Instituteur getInstituteur() {
 		return instituteur;
 	}
 
 
 	/**
+	 * @return the nomClasse
+	 */
+	public String getNomClasse() {
+		return nomClasse;
+	}
+
+	/**
+	 * @param nomClasse the nomClasse to set
+	 */
+	public void setNomClasse(String nomClasse) {
+		this.nomClasse = nomClasse;
+	}
+
+	/**
 	 * @param instituteur the instituteur to set
 	 */
 	public void setInstituteur(Instituteur instituteur) {
 		this.instituteur = instituteur;
-	}
+	}	
 
 
+	// méthodes
 	public void addEleve(Eleve eleve)  throws ClasseException {
-		//		int index = 0;
-		//		while(index<this.eleves.length &&  this.eleves[index]!=null) {
-		//			index++;
-		//			System.out.println(index+" - "+ this.eleves[index]);
-		//		}
-		//		if(index == this.eleves.length) {
-		//			throw new ClasseException("Il y a déjà 20 élèves dans cette classe " + this.nomClasse);
-		//		}
-		//		else { 
-		//			if(eleve.getClasse()==null) {
-		//				eleve.setClasse(this);
-		//			}
-		//			this.eleves[index] = eleve;
-		//			
-		//		}
-
-		if (nbEleves < NB_MAX) {
-			// Il y a de la place dans la classe
-			eleves[nbEleves++] = eleve;
-			//					System.out.println(nbEleves + " - "+ eleve);
-		} else {
-			// dépassement de la capacité de la classe
-			throw new ClasseException("La classe est pleine");
+		if(eleves.size()<NB_MAX) {
+			eleves.add(eleve);
+		}else {
+			throw new ClasseException("Il y a déjà 20 élèves dans cette classe " + this.nomClasse);
 		}
-
 	}
 
 	public Eleve getEleve(int index) throws ClasseException {
 
-		if (index >= 0 && index < nbEleves) {
-			// Alors l'index existe dans le tableau et il y a un éléve renseigné
-			return eleves[index];
+		if (index >= 0 && index < eleves.size()) {
+			// Alors l'index existe dans la liste et il y a un éléve renseigné
+			return eleves.get(index);
 		} else {
 			// L'index est incorrect.
-			throw new ClasseException("La classe ne contient que " + nbEleves + " élèves");
+			throw new ClasseException("La classe ne contient que " + eleves.size() + " élèves");
 		}
 
 	}
 
-	public Eleve[] getListEleve() {
+	public List<Eleve> getListEleve() {
 		return eleves;
 	}
 
 	/**
 	 * 
-	 * @return permet de créer le tableau des référents des élèves d’une classe sans
+	 * @return permet de créer la liste des référents des élèves d’une classe sans
 	 *         doublon. La méthode privée contains vérifie si un
 	 *         parent existe déjà.
 	 */
-	public Parent[] getListParent(){
+	public List<Parent> getListParent(){
 
-		Parent[] result = new Parent[nbEleves];
-		int nbParents = 0;
-		for (int i = 0; i < nbEleves; i++) {
-			Eleve eleve = eleves[i];
+		List<Parent> listParent = new ArrayList<Parent>();
+
+		for (Eleve eleve : eleves) {
 			Parent pCurrent = eleve.getReferent();
-			if (!contains(pCurrent, result, nbParents)) {
-				result[nbParents++] = pCurrent;
+			if (!listParent.contains(pCurrent)) {
+				listParent.add(pCurrent);
 			}
 		}
-		return result;
+		return listParent;
 
 	}
 
-	/**
-	 * 
-	 * @param p         parent courant
-	 * @param parents   le tableau des parents
-	 * @param nbParents le nombre de parents actuel
-	 * @return Vérifie si un parent est déjà dans le tableau pour éviter les
-	 *         doublons
+	public void sortListEleve(){
+		Collections.sort(eleves);  
+		System.out.println(eleves);  
+
+	}
+
+	/*
+	 * remove élève de la liste
 	 */
-	private boolean contains(Parent p, Parent[] parents, int nbParents) {
-		int i = 0;
-
-		boolean isPresent = false;
-		while (i < nbParents && parents[i] != null && !isPresent) {
-			isPresent = p.equals(parents[i++]);
+	public void removeEleve(Eleve eleve) throws ClasseException{
+		if (eleves.indexOf(eleve)>=0) {
+			eleves.remove(eleve);
+		} else {
+			throw new ClasseException("Cet enfant n'est pas trouvé dans cette classe "+ nomClasse);
 		}
-
-		return isPresent;
 	}
+
+
 	@Override
 	public String toString() {
 		StringBuffer result = new StringBuffer();
@@ -125,8 +127,7 @@ public class Classe{
 		result.append("   Instituteur : ").append(this.instituteur.getPrenom()).append(" ")
 		.append(this.instituteur.getNom()).append("\n");
 		result.append("     avec :").append("\n");
-		for (int i = 0; i < nbEleves; i++) {
-			Eleve eleve = eleves[i];
+		for (Eleve eleve : eleves) {
 			result.append("     ").append(eleve.getPrenom()).append(" ").append(eleve.getNom()).append("\n");
 		}
 		result.append("---------------------------------------------------");
