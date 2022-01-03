@@ -58,62 +58,62 @@ public class AppliTestBO {
 		//******************
 		//tester le Panier
 		//******************
-//		Panier panier = new Panier();
-//		try {
-//			panier.addLigne(articles.get(0), 2);
-//			System.out.println("\nREM : Affichage de l'article de la premiere ligne du panier");
-//			System.out.println(panier.getLigne(0).getArticle());
-//			System.out.println("---------------------------------------------------------------");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("ERREUR : " + e.getMessage());
-//		}
-//
-//
-//		try {
-//			panier.addLigne(articles.get(1), 13);
-//			panier.addLigne(articles.get(2), 12);
-//			panier.addLigne(articles.get(3), 5);
-//			
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("ERREUR : " + e.getMessage());
-//		}
-//
-//		try {
-//			System.out.println("\nREM : Affichage du panier - Ajout");
-//			System.out.println(panier.toString());
-//			System.out.println("---------------------------------------------------------------");
-//			
-//		}  catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("ERREUR : " + e.getMessage());
-//		}
-//		
-//		try {
-//			System.out.println("\nREM : Modification du panier");
-//			//modifier une ligne du panier
-//			panier.updateLigne(0, 3); // +1 de BBOrange
-//			panier.updateLigne(1, 12); // -1 de CRA4S
-//			//supprimer une ligne du panier
-//			panier.removeLigne(2); // suppression de PlumeS
-//			
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("ERREUR : " + e.getMessage());
-//		}
-//
-//		try {
-//			System.out.println("\nREM : Affichage du panier - Modification");
-//			System.out.println(panier.toString());
-//			System.out.println("---------------------------------------------------------------");
-//			
-//		}  catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("ERREUR : " + e.getMessage());
-//		}
-//		
-//		
+		Panier panier = new Panier();
+		try {
+			panier.addLigne(articles.get(0), 2);
+			System.out.println("\nREM : Affichage de l'article de la premiere ligne du panier");
+			System.out.println(panier.getLigne(0).getArticle());
+			System.out.println("---------------------------------------------------------------");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERREUR : " + e.getMessage());
+		}
+
+
+		try {
+			panier.addLigne(articles.get(1), 13);
+			panier.addLigne(articles.get(2), 12);
+			panier.addLigne(articles.get(3), 5);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERREUR : " + e.getMessage());
+		}
+
+		try {
+			System.out.println("\nREM : Affichage du panier - Ajout");
+			System.out.println(panier.toString());
+			System.out.println("---------------------------------------------------------------");
+			
+		}  catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERREUR : " + e.getMessage());
+		}
+		
+		try {
+			System.out.println("\nREM : Modification du panier");
+			//modifier une ligne du panier
+			panier.updateLigne(0, 3); // +1 de BBOrange
+			panier.updateLigne(1, 12); // -1 de CRA4S
+			//supprimer une ligne du panier
+			panier.removeLigne(2); // suppression de PlumeS
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERREUR : " + e.getMessage());
+		}
+
+		try {
+			System.out.println("\nREM : Affichage du panier - Modification");
+			System.out.println(panier.toString());
+			System.out.println("---------------------------------------------------------------");
+			
+		}  catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERREUR : " + e.getMessage());
+		}
+		
+		
 	}
 
 	private static void afficherCatalogue(List<Article> articles) {

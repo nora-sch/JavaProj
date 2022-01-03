@@ -2,13 +2,36 @@ package fr.eni.papeterie.bo;
 
 public class Ligne {
 	int qte;
-	
+	Article article;
+
 	public Ligne(Article article, int qte) {
-		this.qte = qte;
+		setQte(qte);
+		setArticle(article);
+
 	}
-	
+
 	// getters et setters
-		
+	/**
+	 * @return the prix of the article
+	 */
+	public float getPrix() {
+		return article.getPrixUnitaire();
+	}
+
+	/**
+	 * @return the article
+	 */
+	public Article getArticle() {
+		return article;
+	}
+
+	/**
+	 * @param article the article to set
+	 */
+	public void setArticle(Article article) {
+		this.article = article;
+	}
+
 	/**
 	 * @return the qte
 	 */
@@ -26,6 +49,18 @@ public class Ligne {
 	// méthodes
 	@Override
 	public String toString() {
-		return "quantité selectionné: "+ qte + (qte>1?"pcs":"pc");
+		StringBuffer buf = new StringBuffer();
+		buf.append("Ligne [");
+		buf.append(" qte=");
+		buf.append(getQte());
+		buf.append(" prix=");
+		buf.append(getPrix());	
+		if(article != null) {
+			buf.append(", ");
+			buf.append("article=");
+			buf.append(getArticle());}
+		buf.append("]");
+
+		return buf.toString();
 	}
 }
