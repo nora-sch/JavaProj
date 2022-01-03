@@ -3,17 +3,21 @@ package fr.eni.papeterie.bo;
 public class Ramette extends Article{
 	int grammage;
 
-//	public Ramette() {
-//		
-//	};
+	public Ramette() {
+		
+	};
 
 	public Ramette(Integer idArticle, String marque, String ref, String designation, float pu, int qte, int grammage) {
-		super(idArticle, marque, ref, designation, pu, qte);
+		setIdArticle(idArticle);
+		setMarque(marque);
+		setReference(ref);
+		setDesignation(designation);
+		setPrixUnitaire(pu);
+		setQteStock(qte);
 		this.grammage = grammage;
 	}
 	public Ramette(String marque, String ref, String designation, float pu, int qte, int grammage) {
-		super(marque, ref, designation, pu, qte);
-		this.grammage = grammage;
+		this(null,  marque, ref, designation, pu, qte, grammage);
 	}
  // getters et setters
 	/**
@@ -32,6 +36,6 @@ public class Ramette extends Article{
 	// méthodes
 	@Override
 	public String toString() {
-		return "grammage - "+ grammage;
+		return super.toString()+this.getClass().getSimpleName()+" [grammage - "+ grammage +"]";
 	}
 }

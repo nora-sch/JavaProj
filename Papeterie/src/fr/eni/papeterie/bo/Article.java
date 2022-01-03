@@ -7,15 +7,6 @@ public abstract class Article {
 	String designation;
 	float prixUnitaire;
 	int qteStock;
-
-	
-	// constructeurs
-	public Article(Integer idArticle, String marque, String ref, String designation, float pu, int qte) {
-
-	}
-	public Article(String marque, String ref, String designation, float pu, int qte) {
-
-	}
 	
 	// getters et setters
 	
@@ -95,6 +86,6 @@ public abstract class Article {
 	// méthodes
 	@Override
 	public String toString() {
-		return "Product [id - "+ idArticle +"; reference - "+ reference + "; marque - " + marque + "; designation - " + designation + "; prix - " + prixUnitaire + "€; quantité -" + qteStock +"; ]";
+		return "Article [id - "+ idArticle +"; reference - "+ reference + "; marque - " + marque + "; designation - " + designation + "; prix - " + prixUnitaire + "€; quantité -" + qteStock +"; ] ";
 	}
 }

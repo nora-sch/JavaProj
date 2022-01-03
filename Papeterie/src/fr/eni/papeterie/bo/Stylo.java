@@ -3,16 +3,20 @@ package fr.eni.papeterie.bo;
 public class Stylo extends Article{
 	String couleur;
 	
-//	public Stylo() {
-//	
-//	}
+	public Stylo() {
+	
+	}
 	public Stylo(Integer idArticle, String marque, String ref, String designation, float pu, int qte, String couleur) {
-		super(idArticle, marque, ref, designation, pu, qte);
+		setIdArticle(idArticle);
+		setMarque(marque);
+		setReference(ref);
+		setDesignation(designation);
+		setPrixUnitaire(pu);
+		setQteStock(qte);
 		this.couleur = couleur;
 	}
 	public Stylo(String marque, String ref, String designation, float pu, int qte, String couleur) {
-		super(marque, ref, designation, pu, qte);
-		this.couleur = couleur;
+		this(null,  marque, ref, designation, pu, qte, couleur);
 	}
 	
 	// getters et setters
@@ -32,7 +36,7 @@ public class Stylo extends Article{
 	// méthodes
 		@Override
 		public String toString() {
-			return "couleur - "+ couleur;
+			return super.toString()+this.getClass().getSimpleName()+" [couleur - "+ couleur +"]";
 		}
 	
 
