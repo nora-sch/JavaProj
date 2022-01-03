@@ -67,16 +67,17 @@ public class Panier {
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
-		buf.append("Panier:");
-		buf.append(System.lineSeparator());	
-				for(int i = 0; i<lignesPanier.size(); i++) {
-					buf.append("ligne ");
-					buf.append(i);
-					buf.append(" : ");
-					buf.append(lignesPanier.get(i));
-				}
-		
-	return buf.toString();
+		buf.append("Panier : \n\n");
+		for (Ligne l : lignesPanier) {
+			if (l != null){
+				buf.append("ligne " + lignesPanier.indexOf(l) + " :\t");
+				buf.append(l.toString());
+				buf.append("\n");
+			} else break;
+		}
+		buf.append("\nValeur du panier : " + getMontant());
+		buf.append("\n\n");
+		return buf.toString();
 	}
 
 }

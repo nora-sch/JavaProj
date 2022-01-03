@@ -36,6 +36,6 @@ public class Ramette extends Article{
 	// méthodes
 	@Override
 	public String toString() {
-		return super.toString()+this.getClass().getSimpleName()+" [grammage - "+ grammage +"]";
+		return super.toString()+this.getClass().getSimpleName()+" [grammage="+ grammage +"]";
 	}
 }

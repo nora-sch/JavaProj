@@ -86,6 +86,6 @@ public abstract class Article {
 	// méthodes
 	@Override
 	public String toString() {
-		return "Article [id - "+ idArticle +"; reference - "+ reference + "; marque - " + marque + "; designation - " + designation + "; prix - " + prixUnitaire + "€; quantité -" + qteStock +"; ] ";
+		return "Article [id="+ idArticle +"; reference="+ reference + "; marque=" + marque + "; designation=" + designation + "; prix=" + prixUnitaire + "€; quantité en stock=" + qteStock +"; ] ";
 	}
 }

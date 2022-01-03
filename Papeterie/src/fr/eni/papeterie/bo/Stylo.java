@@ -36,7 +36,7 @@ public class Stylo extends Article{
 	// méthodes
 		@Override
 		public String toString() {
-			return super.toString()+this.getClass().getSimpleName()+" [couleur - "+ couleur +"]";
+			return super.toString()+this.getClass().getSimpleName()+" [couleur="+ couleur +"]";
 		}
 	
 
