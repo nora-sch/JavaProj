@@ -51,14 +51,12 @@ public class ArticleDaoJdbcImpl {
 	}
 
 	public void insert(Article a) throws DALException  {
-		String sql = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,type,grammage,couleur) VALUES ('?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,type,grammage,couleur) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		try {
 			con = getConnection();
 			stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			// --- error L'index 1 est hors limites!
-			System.out.println(a.getReference());
 			stmt.setString(1, a.getReference());
 			stmt.setString(2, a.getMarque());
 			stmt.setString(3, a.getDesignation());
@@ -81,7 +79,6 @@ public class ArticleDaoJdbcImpl {
 			// récuperer et set dernière id géneré à l'instance d'Article
 			if (result == 1) {
 				ResultSet rs = stmt.getGeneratedKeys();
-				System.out.println(rs);
 				if (rs.next()) {
 					a.setIdArticle(rs.getInt(1));
 				}
@@ -112,7 +109,6 @@ public class ArticleDaoJdbcImpl {
 
 	public List<Article> selectAll() {
 		return null;
-
 	}
 	public void delete(Article a) {
 
