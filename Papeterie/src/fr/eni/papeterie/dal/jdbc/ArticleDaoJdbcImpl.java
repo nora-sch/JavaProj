@@ -110,7 +110,30 @@ public class ArticleDaoJdbcImpl {
 	public List<Article> selectAll() {
 		return null;
 	}
-	public void delete(Article a) {
+	
+	public void delete(Integer idArticle) throws DALException {
+		String sql = "DELETE FROM Articles WHERE idArticle = ?";
+		Connection con = null;
+		PreparedStatement stmt = null;
+		try {
+			con = getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, idArticle);
+			int result = stmt.executeUpdate();
+			System.out.println("Number of deleted records: "+ result);
 
+		} catch (SQLException e) {
+			throw new DALException("Delete article failed - " + idArticle, e);
+		}
+		finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				throw new DALException("close failed - ", e);
+			}
+			closeConnection();
+		}
 	}
 }

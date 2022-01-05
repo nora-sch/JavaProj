@@ -51,13 +51,13 @@ public class AppliTestDAL {
 //			System.out.println("Article après modification  : " + a1.toString() );
 //			
 //			
-//			//Suppression d'un article
-//			System.out.println("\nSuppression de l'article  : " + a1.toString());
-//			articleDAO.delete(a1.getIdArticle());
+			//Suppression d'un article
+			System.out.println("\nSuppression de l'article  : " + a1.toString());
+			articleDAO.delete(a1.getIdArticle());
 //			articles = articleDAO.selectAll();
 //			System.out.println("Liste des articles après suppression : "  );
 //			afficherArticles(articles);
-//			System.out.println("---------------------------------------------------------------");
+			System.out.println("---------------------------------------------------------------");
 //
 //			
 	} catch (DALException e) {
