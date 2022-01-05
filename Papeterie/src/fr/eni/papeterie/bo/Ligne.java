@@ -45,6 +45,9 @@ public class Ligne {
 	public void setQte(int qte) {
 		this.qte = qte;
 	}
+	public float getLineMontant() {
+		return qte * getPrix();
+	}
 
 	// méthodes
 	@Override

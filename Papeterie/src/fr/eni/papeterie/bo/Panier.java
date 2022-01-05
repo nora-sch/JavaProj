@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Panier {
-	float montant;
-	List<Ligne> lignesPanier;
+	private float montant;
+	private List<Ligne> lignesPanier;
 
 
 	public Panier() {
@@ -13,18 +13,26 @@ public class Panier {
 	}
 	// getters et settters
 	/**
-	 * @return the montant
+	 * @return the montant from sum of article price and qty in Ligne
 	 */
 	public float getMontant() {
+		montant = 0;
+		for (Ligne l : getLignesPanier()) {
+			if (l != null){
+				montant = montant+(l.getLineMontant());
+			}else break;
+		}
 		return montant;
 	}
 
-	/**
-	 * @param montant the montant to set
-	 */
-	public void setMontant(float montant) {
-		this.montant = montant;
-	}
+	//	/**
+	//	 * @param montant the montant to set
+	//	 */
+	//	public void setMontant(float montant) {
+	//		this.montant = montant;
+	//	}
+
+
 
 	// méthodes
 	/**
@@ -75,7 +83,7 @@ public class Panier {
 				buf.append("\n");
 			} else break;
 		}
-		buf.append("\nValeur du panier : " + getMontant());
+		buf.append("\nValeur du panier : " + getMontant() + "€");
 		buf.append("\n\n");
 		return buf.toString();
 	}
