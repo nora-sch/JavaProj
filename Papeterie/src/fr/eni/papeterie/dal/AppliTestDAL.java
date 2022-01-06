@@ -14,7 +14,11 @@ public class AppliTestDAL {
 
 		//Déclaration et instanciation de la DAO
 		ArticleDaoJdbcImpl articleDAO = new ArticleDaoJdbcImpl();
+		
+		
 
+		
+		
 		//Instanciation du jeu d'essai 
 		Article a1 = new Stylo( "Bic", "BBOrange","Bic bille Orange", 1.2f, 20, "bleu");
 		Article a2 = new Ramette(  "Clairef", "CRA4S", "Ramette A4 Sup", 9f, 20, 80);
@@ -24,6 +28,8 @@ public class AppliTestDAL {
 		System.out.println("Ajout des articles... ");
 		//TODO...
 		try {
+//			articleDAO.deleteAll();
+						
 			articleDAO.insert(a1);
 			System.out.println("Article ajouté  : " + a1.toString() );
 			articleDAO.insert(a2);
@@ -62,7 +68,8 @@ public class AppliTestDAL {
 			System.out.println("---------------------------------------------------------------");
 //
 //			
-			articleDAO.deleteAll();
+	
+			
 	} catch (DALException e) {
 			e.printStackTrace();
 		}

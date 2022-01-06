@@ -54,39 +54,90 @@ public class ArticleDaoJdbcImpl {
 	}
 
 	// méthodes
+
+	public int existByRefAndPar(Article a) throws DALException {
+		int exists = 0;
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String sql = "";
+
+		try {				
+			sql = "SELECT * FROM Articles WHERE reference = ?";
+			con = getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, a.getReference());
+			ResultSet result = stmt.executeQuery();
+			if (result.next()) {
+				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
+					if(result.getString("couleur").equalsIgnoreCase(((Stylo)a).getCouleur())) {	
+						exists = result.getInt("idArticle");}
+				}
+				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
+					if(((Integer)result.getInt("grammage")).toString().equals(((Integer)((Ramette)a).getGrammage()).toString())) {
+						exists = result.getInt("idArticle");
+					};  			
+				}
+			}
+		}
+		catch(SQLException e) {
+
+			throw new DALException("Article with not found ", e);
+		}
+
+		finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+
+			} catch (SQLException e) {
+				throw new DALException("close failed - ", e);
+			}
+			closeConnection();
+		}
+		return exists;
+	}
 	public void insert(Article a) throws DALException  {
-		//TODO verifier si un article existe déjà avec des parametres d'instance particuliers
 		String sql = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,type,grammage,couleur) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		try {
-			con = getConnection();
-			stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			stmt.setString(1, a.getReference());
-			stmt.setString(2, a.getMarque());
-			stmt.setString(3, a.getDesignation());
-			stmt.setFloat(4, a.getPrixUnitaire());
-			stmt.setInt(5, a.getQteStock());
-			if (a instanceof Ramette) {
-				Ramette r = (Ramette) a;
-				stmt.setString(6, TYPE_RAMETTE);
-				stmt.setInt(7, r.getGrammage());
-				stmt.setNull(8, Types.VARCHAR);
-			}
-			if (a instanceof Stylo) {
-				Stylo s = (Stylo) a;
-				stmt.setString(6, TYPE_STYLO);
-				stmt.setNull(7, Types.INTEGER);
-				stmt.setString(8, s.getCouleur());
-			}
-			// ---------------------------
-			int result = stmt.executeUpdate();
-			// récuperer et set dernière id géneré à l'instance d'Article
-			if (result == 1) {
-				ResultSet rs = stmt.getGeneratedKeys();
-				if (rs.next()) {
-					a.setIdArticle(rs.getInt(1));
+			// exists récupère l'id d'une article où la reference et parametres d'instance sont les mêmes qu'à l'article qu'on veut insèrer
+			int exists = existByRefAndPar(a);
+			System.out.println(exists);
+			if(exists == 0) {
+				con = getConnection();
+				stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				stmt.setString(1, a.getReference());
+				stmt.setString(2, a.getMarque());
+				stmt.setString(3, a.getDesignation());
+				stmt.setFloat(4, a.getPrixUnitaire());
+				stmt.setInt(5, a.getQteStock());
+				if (a instanceof Ramette) {
+					Ramette r = (Ramette) a;
+					stmt.setString(6, TYPE_RAMETTE);
+					stmt.setInt(7, r.getGrammage());
+					stmt.setNull(8, Types.VARCHAR);
 				}
+				if (a instanceof Stylo) {
+					Stylo s = (Stylo) a;
+					stmt.setString(6, TYPE_STYLO);
+					stmt.setNull(7, Types.INTEGER);
+					stmt.setString(8, s.getCouleur());
+				}
+				// ---------------------------
+				int result = stmt.executeUpdate();
+				// récuperer et set dernière id géneré à l'instance d'Article
+				if (result == 1) {
+					ResultSet rs = stmt.getGeneratedKeys();
+					if (rs.next()) {
+						a.setIdArticle(rs.getInt(1));
+					}
+				}
+			}else{
+				// si article est trouvé dans la bdd - seule la quantité est modifié (ajouté)
+				Article duplicat  = selectById(exists);
+				updateQte(duplicat, a.getQteStock());
 			}
 
 		} catch (SQLException e) {
@@ -106,7 +157,6 @@ public class ArticleDaoJdbcImpl {
 	}
 
 	public void update(Article a) throws DALException {
-		//TODO verifier si un article existe déjà avec des parametres d'instance particuliers
 		String sql = "UPDATE Articles set reference=?, marque=?,designation=?,prixUnitaire=?,qteStock=?, grammage=?,couleur=? WHERE idArticle=?";
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -130,8 +180,9 @@ public class ArticleDaoJdbcImpl {
 			}
 			stmt.setInt(8, a.getIdArticle());
 			// ---------------------------
-			int result = stmt.executeUpdate();
-			
+			stmt.executeUpdate();
+			System.out.println("article "+ a.getReference() +" with id " + a.getIdArticle() +" has been updated");
+
 		} catch (SQLException e) {
 			throw new DALException("Update of article failed - " + a, e);
 		}
@@ -148,9 +199,37 @@ public class ArticleDaoJdbcImpl {
 		}
 
 	}
+	public void updateQte(Article a, int plusQte) throws DALException {
+		String sql = "UPDATE Articles set qteStock=? WHERE idArticle=?";
+		Connection con = null;
+		PreparedStatement stmt = null;
+		try {
+			con = getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, (a.getQteStock() + plusQte));
+			stmt.setInt(2, a.getIdArticle());
+						// ---------------------------
+			stmt.executeUpdate();
+			System.out.println("article "+ a.getReference() +" with id " + a.getIdArticle() +" has been updated");
+
+		} catch (SQLException e) {
+			throw new DALException("Update of quantity of article failed - " + a, e);
+		}
+		finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+
+			} catch (SQLException e) {
+				throw new DALException("close failed - ", e);
+			}
+			closeConnection();
+		}
+
+	}
 	public Article selectById(int idArticle) throws DALException {
 		Article a = null;
-
 		String sql = "SELECT * FROM Articles WHERE idArticle = ?";
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -261,7 +340,7 @@ public class ArticleDaoJdbcImpl {
 			closeConnection();
 		}
 	}
-	
+
 	public void deleteAll() throws DALException {
 		String sql = "TRUNCATE table Articles";
 		Connection con = null;
@@ -270,10 +349,10 @@ public class ArticleDaoJdbcImpl {
 			int nbArticles = selectAll().size();
 			con = getConnection();
 			stmt = con.createStatement();
-		stmt.execute(sql);
-		System.out.println("Content of Articles has been truncated");
-		System.out.println(nbArticles + " articles deleted");
-			
+			stmt.execute(sql);
+			System.out.println("Content of Articles has been truncated");
+			System.out.println(nbArticles + " articles deleted");
+
 		} catch (SQLException e) {
 			throw new DALException("Delete articles failed  ", e);
 		}
