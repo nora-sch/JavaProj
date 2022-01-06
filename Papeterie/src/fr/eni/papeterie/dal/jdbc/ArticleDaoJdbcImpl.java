@@ -33,6 +33,8 @@ public class ArticleDaoJdbcImpl {
 	public ArticleDaoJdbcImpl() {
 
 	}
+
+	// connexion 
 	public Connection getConnection() throws SQLException {
 		String url = "jdbc:sqlserver://localhost:1433;databaseName=PAPETERIE_DB";
 		connection = DriverManager.getConnection(url, "sa", "rt");
@@ -50,7 +52,9 @@ public class ArticleDaoJdbcImpl {
 		}
 	}
 
+	// méthodes
 	public void insert(Article a) throws DALException  {
+		//TODO verifier si un article existe déjà avec des parametres d'instance particuliers
 		String sql = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,type,grammage,couleur) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -103,8 +107,54 @@ public class ArticleDaoJdbcImpl {
 	public void update(Article a) {
 
 	}
-	public Article selectById(int idArticle) {
-		return null;
+	public Article selectById(int idArticle) throws DALException {
+		Article a = null;
+
+		String sql = "SELECT * FROM Articles WHERE idArticle = ?";
+		Connection con = null;
+		PreparedStatement stmt = null;
+		try {
+			con = getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, idArticle);
+			ResultSet result = stmt.executeQuery();
+			if (result.next()) {
+				// trim pour reference et type, car dans la bdd ils sont stockés comme un nchar10
+				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
+					a =	new Stylo(result.getInt("idArticle"), result.getString("marque"), result.getString("reference").trim(),
+							result.getString("designation"), result.getFloat("prixUnitaire"), result.getInt("qteStock"),
+							result.getString("couleur"));
+				}
+				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
+					a =	new Ramette(result.getInt("idArticle"), result.getString("marque"), result.getString("reference").trim(),
+							result.getString("designation"), result.getFloat("prixUnitaire"), result.getInt("qteStock"),
+							result.getInt("grammage"));
+				}
+
+			}
+			if(a == null) {
+				System.out.println("Article with id - " + idArticle + " not found ");
+				throw new DALException();
+				
+			}
+		}
+		catch(SQLException e) {
+
+			throw new DALException("Article with id - " + idArticle + " not found ", e);
+		}
+
+		finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+
+			} catch (SQLException e) {
+				throw new DALException("close failed - ", e);
+			}
+			closeConnection();
+		}
+		return a;
 	}
 
 	public List<Article> selectAll() {
@@ -118,10 +168,12 @@ public class ArticleDaoJdbcImpl {
 		try {
 			con = getConnection();
 			stmt = con.prepareStatement(sql);
+			//TODO if is getById than:
 			stmt.setInt(1, idArticle);
 			int result = stmt.executeUpdate();
 			System.out.println("Number of deleted records: "+ result);
-
+			System.out.println("Article with id: "+ idArticle+ " has been deleted");
+			//TODO else syso article with this id not exist BREAK
 		} catch (SQLException e) {
 			throw new DALException("Delete article failed - " + idArticle, e);
 		}

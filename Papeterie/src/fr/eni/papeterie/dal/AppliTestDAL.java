@@ -24,17 +24,19 @@ public class AppliTestDAL {
 		System.out.println("Ajout des articles... ");
 		//TODO...
 		try {
-			articleDAO.insert(a1);
-			System.out.println("Article ajouté  : " + a1.toString() );
-			articleDAO.insert(a2);
-			System.out.println("Article ajouté  : " + a2.toString() );
-			articleDAO.insert(a3);
-			System.out.println("Article ajouté  : " + a3.toString() );
+//			articleDAO.insert(a1);
+//			System.out.println("Article ajouté  : " + a1.toString() );
+//			articleDAO.insert(a2);
+//			System.out.println("Article ajouté  : " + a2.toString() );
+//			articleDAO.insert(a3);
+//			System.out.println("Article ajouté  : " + a3.toString() );
 
 //
-//			//Sélection de l'article par id
+			//Sélection de l'article par id
 //			Article a = articleDAO.selectById(a2.getIdArticle());
-//			System.out.println("\nSélection de l'article par id  : " + a.toString() );
+			Article a = articleDAO.selectById(7);
+		
+			System.out.println("\nSélection de l'article par id  : " + a.toString() );
 //
 //			//Sélection de tous les articles
 //			List<Article> articles = articleDAO.selectAll();
@@ -52,8 +54,9 @@ public class AppliTestDAL {
 //			
 //			
 			//Suppression d'un article
-			System.out.println("\nSuppression de l'article  : " + a1.toString());
-			articleDAO.delete(a1.getIdArticle());
+//			System.out.println("\nSuppression de l'article  : " + a1.toString());
+//			articleDAO.delete(a1.getIdArticle());
+//			articleDAO.delete(7);
 //			articles = articleDAO.selectAll();
 //			System.out.println("Liste des articles après suppression : "  );
 //			afficherArticles(articles);
