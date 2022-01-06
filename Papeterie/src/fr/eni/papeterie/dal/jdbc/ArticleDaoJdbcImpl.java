@@ -261,4 +261,31 @@ public class ArticleDaoJdbcImpl {
 			closeConnection();
 		}
 	}
+	
+	public void deleteAll() throws DALException {
+		String sql = "TRUNCATE table Articles";
+		Connection con = null;
+		Statement stmt = null;
+		try {
+			int nbArticles = selectAll().size();
+			con = getConnection();
+			stmt = con.createStatement();
+		stmt.execute(sql);
+		System.out.println("Content of Articles has been truncated");
+		System.out.println(nbArticles + " articles deleted");
+			
+		} catch (SQLException e) {
+			throw new DALException("Delete articles failed  ", e);
+		}
+		finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				throw new DALException("close failed - ", e);
+			}
+			closeConnection();
+		}
+	}
 }

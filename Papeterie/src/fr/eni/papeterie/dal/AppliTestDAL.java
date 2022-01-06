@@ -62,12 +62,12 @@ public class AppliTestDAL {
 			System.out.println("---------------------------------------------------------------");
 //
 //			
+			articleDAO.deleteAll();
 	} catch (DALException e) {
 			e.printStackTrace();
 		}
 
 }
-
 	
 	private static void afficherArticles(List<Article> articles){
 		StringBuffer sb = new StringBuffer();
