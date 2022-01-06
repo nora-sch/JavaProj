@@ -34,14 +34,14 @@ public class AppliTestDAL {
 //
 			//Sélection de l'article par id
 //			Article a = articleDAO.selectById(a2.getIdArticle());
-			Article a = articleDAO.selectById(7);
+//			Article a = articleDAO.selectById(7);
 		
-			System.out.println("\nSélection de l'article par id  : " + a.toString() );
+//			System.out.println("\nSélection de l'article par id  : " + a.toString() );
 //
 //			//Sélection de tous les articles
-//			List<Article> articles = articleDAO.selectAll();
-//			System.out.println("\nSélection de tous les articles  : "  );
-//			afficherArticles(articles);
+			List<Article> articles = articleDAO.selectAll();
+			System.out.println("\nSélection de tous les articles  : "  );
+			afficherArticles(articles);
 //
 //			//Modification d'un article
 //			System.out.println("\nModification d'un article  : " );

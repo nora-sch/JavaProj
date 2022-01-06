@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -135,7 +136,7 @@ public class ArticleDaoJdbcImpl {
 			if(a == null) {
 				System.out.println("Article with id - " + idArticle + " not found ");
 				throw new DALException();
-				
+
 			}
 		}
 		catch(SQLException e) {
@@ -157,10 +158,42 @@ public class ArticleDaoJdbcImpl {
 		return a;
 	}
 
-	public List<Article> selectAll() {
-		return null;
+	public List<Article> selectAll() throws DALException {
+		List<Article> articles = new ArrayList<Article>();
+		Connection con = null;
+		Statement stmt = null;
+		try {
+			con = getConnection();
+			stmt = con.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT idArticle, reference, marque, designation, prixUnitaire, qteStock, grammage, couleur, type from Articles");
+			Article a = null;
+			while(result.next()) {
+				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
+				a = new Stylo(result.getInt("idArticle"), result.getString("reference").trim(), result.getString("marque"), result.getString("designation"),
+						result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getString("couleur"));
+				}
+				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
+					a = new Ramette(result.getInt("idArticle"), result.getString("reference").trim(), result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getInt("grammage"));
+					}
+				articles.add(a);
+			}
+		} catch (SQLException e) {
+			throw new DALException("Selection of articles failed - " + e);
+		}
+		finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException e) {
+				throw new DALException("close failed - ", e);
+			}
+			closeConnection();
+		}
+		return articles;
 	}
-	
+
 	public void delete(Integer idArticle) throws DALException {
 		String sql = "DELETE FROM Articles WHERE idArticle = ?";
 		Connection con = null;
