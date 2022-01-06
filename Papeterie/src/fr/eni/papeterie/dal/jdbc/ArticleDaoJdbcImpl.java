@@ -105,7 +105,47 @@ public class ArticleDaoJdbcImpl {
 		}
 	}
 
-	public void update(Article a) {
+	public void update(Article a) throws DALException {
+		//TODO verifier si un article existe déjà avec des parametres d'instance particuliers
+		String sql = "UPDATE Articles set reference=?, marque=?,designation=?,prixUnitaire=?,qteStock=?, grammage=?,couleur=? WHERE idArticle=?";
+		Connection con = null;
+		PreparedStatement stmt = null;
+		try {
+			con = getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, a.getReference());
+			stmt.setString(2, a.getMarque());
+			stmt.setString(3, a.getDesignation());
+			stmt.setFloat(4, a.getPrixUnitaire());
+			stmt.setInt(5, a.getQteStock());
+			if (a instanceof Ramette) {
+				Ramette r = (Ramette) a;
+				stmt.setInt(6, r.getGrammage());
+				stmt.setNull(7, Types.VARCHAR);
+			}
+			if (a instanceof Stylo) {
+				Stylo s = (Stylo) a;
+				stmt.setNull(6, Types.INTEGER);
+				stmt.setString(7, s.getCouleur());
+			}
+			stmt.setInt(8, a.getIdArticle());
+			// ---------------------------
+			int result = stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new DALException("Update of article failed - " + a, e);
+		}
+		finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+
+			} catch (SQLException e) {
+				throw new DALException("close failed - ", e);
+			}
+			closeConnection();
+		}
 
 	}
 	public Article selectById(int idArticle) throws DALException {
@@ -169,13 +209,13 @@ public class ArticleDaoJdbcImpl {
 			Article a = null;
 			while(result.next()) {
 				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
-				a = new Stylo(result.getInt("idArticle"), result.getString("reference").trim(), result.getString("marque"), result.getString("designation"),
-						result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getString("couleur"));
+					a = new Stylo(result.getInt("idArticle"), result.getString("reference").trim(), result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getString("couleur"));
 				}
 				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
 					a = new Ramette(result.getInt("idArticle"), result.getString("reference").trim(), result.getString("marque"), result.getString("designation"),
 							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getInt("grammage"));
-					}
+				}
 				articles.add(a);
 			}
 		} catch (SQLException e) {
