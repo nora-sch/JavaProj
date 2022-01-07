@@ -52,7 +52,10 @@ public class AppliTestBLL {
 		// Suppression d'un article
 		try {
 			mger.removeArticle(stylo);
-			System.out.println(mger.getCatalogue());
+			List<Article> list =mger.getCatalogue();
+			for(Article a :list) {
+				System.out.println(a);
+			}
 		} catch (BLLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

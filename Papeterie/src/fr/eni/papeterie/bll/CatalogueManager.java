@@ -33,6 +33,27 @@ public class CatalogueManager {
 		if (a.getIdArticle() != null) {
 			throw new BLLException("This article already exists in the database");
 		} else {
+
+			// ======================================================================== //
+			try {
+				List<Article> articlesByReference = daoArticle.getByReference(a.getReference());
+				if (articlesByReference != null && articlesByReference.size() > 0) {
+					for (Article art : articlesByReference) {
+						if (art instanceof Stylo && (((Stylo) art).getCouleur().trim()).equalsIgnoreCase(((Stylo) a).getCouleur().trim())) {
+							throw new BLLException("This reference-color combination exists already: " + a.getReference()+"-"+((Stylo) a).getCouleur().trim());
+						}
+						if (art instanceof Ramette && (((Ramette) art).getGrammage())==(((Ramette) a).getGrammage())) {
+							throw new BLLException("This reference-grammage combination exists already: " + a.getReference()+"-"+((Ramette) a).getGrammage());
+						}
+					}
+				}
+
+			} catch (DALException e1) {
+				throw new BLLException("Article " + a + " has not been inserted in the database, because it is a duplicate! " + e1);
+						}
+
+			// ======================================================================== //
+
 			try {
 				validerArticle(a);
 				daoArticle.insert(a);
@@ -86,7 +107,7 @@ public class CatalogueManager {
 			errorMessage.append("The reference of article should be provided!\n");
 			isValide = false;
 		}
-		if(a.getReference().trim().length()>10) {
+		if (a.getReference().trim().length() > 10) {
 			errorMessage.append("The length of the reference is 10 characters maximum!\n");
 			isValide = false;
 		}
@@ -96,7 +117,7 @@ public class CatalogueManager {
 			errorMessage.append("The trademark of article should be provided!\n");
 			isValide = false;
 		}
-		if(a.getMarque().trim().length()>200) {
+		if (a.getMarque().trim().length() > 200) {
 			errorMessage.append("The length of the trademark is 200 characters maximum!\n");
 			isValide = false;
 		}
@@ -106,11 +127,11 @@ public class CatalogueManager {
 			errorMessage.append("The designation of article should be provided!\n");
 			isValide = false;
 		}
-		if(a.getDesignation().trim().length()>200) {
+		if (a.getDesignation().trim().length() > 200) {
 			errorMessage.append("The length of the designation is 250 characters maximum!\n");
 			isValide = false;
 		}
-		
+
 		// validation de prixUnitaire (float)
 		if (a.getPrixUnitaire() <= 0) {
 			errorMessage.append("The price of article should be provided and it needs to be positive!\n");

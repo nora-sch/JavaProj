@@ -20,87 +20,27 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 	private static final String TYPE_STYLO = "STYLO";
 	private static final String TYPE_RAMETTE = "RAMETTE";
 
-	// private Connection connection = null;
-
-	// static {
-	// // charger le driver jdbc en mémoire
-	// try {
-	// Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-	// } catch (ClassNotFoundException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 	public ArticleDaoJdbcImpl() {
 
 	}
 
 	// méthodes
 
-	public int existByRefAndPar(Article a) throws DALException {
-		int exists = 0;
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet result = null;
-		String sql = "";
-
-		try {
-			sql = "SELECT * FROM Articles WHERE reference = ?";
-			con = JdbcTools.getConnection();
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, a.getReference());
-			result = stmt.executeQuery();
-			if (result.next()) {
-				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
-					if (result.getString("couleur").equalsIgnoreCase(((Stylo) a).getCouleur())) {
-						exists = result.getInt("idArticle");
-					}
-				}
-				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
-					if (((Integer) result.getInt("grammage")).toString()
-							.equals(((Integer) ((Ramette) a).getGrammage()).toString())) {
-						exists = result.getInt("idArticle");
-					}
-				}
-			}
-		} catch (SQLException e) {
-			throw new DALException("Article not found ", e);
-		} finally {
-			if (result != null) {
-				try {
-					result.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			try {
-				JdbcTools.closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		return exists;
-	}
-
+	/*
+	 * insert article in the database
+	 * 
+	 * @param Article a
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return void
+	 */
 	public void insert(Article a) throws DALException {
 		String sql = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,type,grammage,couleur) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet result = null;
 		try {
-			// exists récupère l'id d'une article où la reference et parametres d'instance
-			// sont les mêmes qu'à l'article qu'on veut insèrer
-			// int exists = existByRefAndPar(a);
-			// System.out.println(exists);
-			// if(exists == 0) {
 			con = JdbcTools.getConnection();
 			stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, a.getReference());
@@ -127,12 +67,6 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 			if (result.next()) {
 				a.setIdArticle(result.getInt(1));
 			}
-			// }else{
-			// // si article est trouvé dans la bdd - seule la quantité est modifié (ajouté)
-			// Article duplicat = selectById(exists);
-			// updateQte(duplicat, a.getQteStock());
-			// }
-
 		} catch (SQLException e) {
 			throw new DALException("Insert article failed - " + a, e);
 		} finally {
@@ -158,6 +92,15 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 		}
 	}
 
+	/*
+	 * update article
+	 * 
+	 * @param Article a
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return void
+	 */
 	public void update(Article a) throws DALException {
 		String sql = "UPDATE Articles set reference=?, marque=?,designation=?,prixUnitaire=?,qteStock=?, grammage=?,couleur=? WHERE idArticle=?";
 		Connection con = null;
@@ -204,6 +147,17 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 
 	}
 
+	/*
+	 * update quantity of one article
+	 * 
+	 * @param Article a
+	 * 
+	 * @param plusQte quantity to add
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return void
+	 */
 	public void updateQte(Article a, int plusQte) throws DALException {
 		String sql = "UPDATE Articles set qteStock=? WHERE idArticle=?";
 		Connection con = null;
@@ -235,6 +189,15 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 		}
 	}
 
+	/*
+	 * select article by its Id
+	 * 
+	 * @param int idArticle
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return Article
+	 */
 	public Article selectById(int idArticle) throws DALException {
 		Article a = null;
 		String sql = "SELECT * FROM Articles WHERE idArticle = ?";
@@ -295,6 +258,13 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 		return a;
 	}
 
+	/*
+	 * select all articles
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return List<Article>
+	 */
 	public List<Article> selectAll() throws DALException {
 		List<Article> articles = new ArrayList<Article>();
 		Connection con = null;
@@ -345,6 +315,15 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
+	/*
+	 * delete article by its Id
+	 * 
+	 * @param int idArticle
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return void
+	 */
 	public void delete(int idArticle) throws DALException {
 		String sql = "DELETE FROM Articles WHERE idArticle = ?";
 		Connection con = null;
@@ -376,6 +355,75 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 		}
 	}
 
+	/*
+	 * select list of articles by their reference
+	 * 
+	 * @param String ref (reference)
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return List<Article>
+	 */
+	public List<Article> getByReference(String ref) throws DALException {
+		List<Article> articles = new ArrayList<Article>();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+
+		try {
+			String sql = "SELECT * FROM Articles WHERE reference = ?";
+			con = JdbcTools.getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, ref);
+			result = stmt.executeQuery();
+			Article a = null;
+			while (result.next()) {
+				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
+					a = new Stylo(result.getInt("idArticle"), result.getString("reference").trim(),
+							result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getString("couleur"));
+				}
+				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
+					a = new Ramette(result.getInt("idArticle"), result.getString("reference").trim(),
+							result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getInt("grammage"));
+				}
+				articles.add(a);
+			}
+		} catch (SQLException e) {
+			throw new DALException("Article not found ", e);
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				JdbcTools.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return articles;
+	}
+
+	/*
+	 * delete all from the table Articles
+	 * 
+	 * @throws DALException
+	 * 
+	 * @return void
+	 */
 	public void deleteAll() throws DALException {
 		String sql = "TRUNCATE table Articles";
 		Connection con = null;
