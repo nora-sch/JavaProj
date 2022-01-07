@@ -22,7 +22,7 @@ public class AppliTestDAL {
 		System.out.println("Ajout des articles... ");
 		try {
 			
-//			articleDAO.deleteAll();
+//			articleDAO.deleteAll(); 
 			
 			articleDAO.insert(a1);
 			System.out.println("Article ajouté  : " + a1.toString() );

@@ -1,5 +1,6 @@
 package fr.eni.papeterie.bll;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.papeterie.bo.Article;
@@ -15,13 +16,13 @@ public class CatalogueManager {
 	private ArticleDAO daoArticle;
 
 	// constructeur
-	private CatalogueManager() {
+	public CatalogueManager() throws BLLException {
 		// instancier le Data Access Object
 		daoArticle = DAOFactory.getArticleDAO();
 	}
 
 	// get instance of CatalogueManager
-	public static CatalogueManager getInstance() {
+	public static CatalogueManager getInstance() throws BLLException {
 		if (instance == null) {
 			instance = new CatalogueManager();
 		}
@@ -42,15 +43,31 @@ public class CatalogueManager {
 	}
 
 	public void updateArticle(Article a) throws BLLException {
-
+		try {
+			validerArticle(a);
+			daoArticle.update(a);
+		} catch (DALException e) {
+			throw new BLLException("Article " + a + " has not been updated! " + e);
+		}
 	}
 
 	public void removeArticle(Article a) throws BLLException {
-
+		try {
+			validerArticle(a);
+			daoArticle.delete(a.getIdArticle());
+		} catch (DALException e) {
+			throw new BLLException("Article " + a + " couldn't be deleted! " + e);
+		}
 	}
 
 	public List<Article> getCatalogue() throws BLLException {
-		return null;
+		List<Article> list = null;
+		try {
+			list = daoArticle.selectAll();
+		} catch (DALException e) {
+			throw new BLLException("List of the articles couldn't be found! " + e);
+		}
+		return list;
 	}
 
 	// validation de paramètres d'un Article
@@ -110,8 +127,9 @@ public class CatalogueManager {
 				isValide = false;
 			}
 		}
-		
-		// si la validation n'est pas réussite - lever une exception qui affiche un message
+
+		// si la validation n'est pas réussite - lever une exception qui affiche un
+		// message
 		if (!isValide) {
 			throw new BLLException(errorMessage.toString());
 		}
