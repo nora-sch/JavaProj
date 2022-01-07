@@ -86,29 +86,34 @@ public class CatalogueManager {
 			errorMessage.append("The price of article should be provided and it needs to be positive!\n");
 			isValide = false;
 		}
-		
+
 		// validation de stock
 		if (a.getQteStock() < 0) {
 			errorMessage.append("The quantity of article should be provided and it can't be negative!\n");
 			isValide = false;
 		}
-		
+
 		// validation de parametres d'instance du type
-		if(a instanceof Stylo) {
-			Stylo s = (Stylo)a;
+		if (a instanceof Stylo) {
+			Stylo s = (Stylo) a;
 			// couleur
 			if (s.getCouleur() == null || s.getCouleur().trim().length() == 0) {
 				errorMessage.append("The color of the pen should be provided!\n");
 				isValide = false;
 			}
 		}
-		if(a instanceof Ramette) {
-			Ramette r = (Ramette)a;
+		if (a instanceof Ramette) {
+			Ramette r = (Ramette) a;
 			// grammage
-			if (r.getGrammage() <=0) {
+			if (r.getGrammage() <= 0) {
 				errorMessage.append("The weight of the paper ream should be provided!\n");
 				isValide = false;
 			}
+		}
+		
+		// si la validation n'est pas réussite - lever une exception qui affiche un message
+		if (!isValide) {
+			throw new BLLException(errorMessage.toString());
 		}
 	}
 
