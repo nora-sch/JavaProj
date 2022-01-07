@@ -81,30 +81,43 @@ public class CatalogueManager {
 			throw new BLLException("Article doesn't exist");
 		}
 
-		// validation de réference
+		// validation de réference (nchar 10)
 		if (a.getReference() == null || a.getReference().trim().length() == 0) {
 			errorMessage.append("The reference of article should be provided!\n");
 			isValide = false;
 		}
+		if(a.getReference().trim().length()>10) {
+			errorMessage.append("The length of the reference is 10 characters maximum!\n");
+			isValide = false;
+		}
 
-		// validation de marque
+		// validation de marque (varchar 200)
 		if (a.getMarque() == null || a.getMarque().trim().length() == 0) {
 			errorMessage.append("The trademark of article should be provided!\n");
 			isValide = false;
 		}
+		if(a.getMarque().trim().length()>200) {
+			errorMessage.append("The length of the trademark is 200 characters maximum!\n");
+			isValide = false;
+		}
 
-		// validation de designation
+		// validation de designation (varchar 250)
 		if (a.getDesignation() == null || a.getDesignation().trim().length() == 0) {
 			errorMessage.append("The designation of article should be provided!\n");
 			isValide = false;
 		}
-		// validation de prixUnitaire
+		if(a.getDesignation().trim().length()>200) {
+			errorMessage.append("The length of the designation is 250 characters maximum!\n");
+			isValide = false;
+		}
+		
+		// validation de prixUnitaire (float)
 		if (a.getPrixUnitaire() <= 0) {
 			errorMessage.append("The price of article should be provided and it needs to be positive!\n");
 			isValide = false;
 		}
 
-		// validation de stock
+		// validation de stock (int)
 		if (a.getQteStock() < 0) {
 			errorMessage.append("The quantity of article should be provided and it can't be negative!\n");
 			isValide = false;
