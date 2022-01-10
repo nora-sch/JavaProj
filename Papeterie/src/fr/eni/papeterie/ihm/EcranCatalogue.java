@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -25,6 +26,13 @@ public class EcranCatalogue extends JFrame {
 	private JTextField txtStock;
 	private JLabel lblPrix;
 	private JTextField txtPrix;
+	// ==============
+	private JLabel lblType;
+	private JRadioButton radioTypeRamette;
+	private JRadioButton radioTypeStylo;
+
+	// ==============
+
 	private JPanel panBoutons;
 	private JButton btnAjouter, btnAnnuler;
 
@@ -82,7 +90,7 @@ public class EcranCatalogue extends JFrame {
 		panel.add(getLblDesignation(), gbc);
 		gbc.gridx = 1;
 		panel.add(getTxtDesignation(), gbc);
-		
+
 		// Ligne 3
 		gbc.gridy = 2;
 		gbc.gridx = 0;
@@ -90,6 +98,27 @@ public class EcranCatalogue extends JFrame {
 		gbc.gridx = 1;
 		panel.add(getTxtMarque(), gbc);
 
+		// Ligne 4
+		gbc.gridy = 3;
+		gbc.gridx = 0;
+		panel.add(getLblStock(), gbc);
+		gbc.gridx = 1;
+		panel.add(getTxtStock(), gbc);
+
+		// Ligne 5
+		gbc.gridy = 4;
+		gbc.gridx = 0;
+		panel.add(getLblPrix(), gbc);
+		gbc.gridx = 1;
+		panel.add(getTxtPrix(), gbc);
+
+		// Ligne 6
+		gbc.gridy = 5;
+		gbc.gridx = 0;
+		panel.add(getLblType(), gbc);
+		gbc.gridx = 1;
+		panel.add(getRadioTypeRamette(), gbc);
+//		panel.add(getRadioTypeStylo(), gbc);
 
 		// Ligne 8;
 //		gbc.gridy = 8;
@@ -140,7 +169,7 @@ public class EcranCatalogue extends JFrame {
 	public JTextArea getTxtDesignation() {
 		if (txtDesignation == null) {
 //			txtDesignation = new JTextField(30);
-			txtDesignation = new JTextArea(1,30);
+			txtDesignation = new JTextArea(1, 30);
 			txtDesignation.setWrapStyleWord(true);
 			txtDesignation.setLineWrap(true);
 //			txtDesignation.getText().length();   // 250
@@ -172,6 +201,9 @@ public class EcranCatalogue extends JFrame {
 	 * @return the lblStock
 	 */
 	public JLabel getLblStock() {
+		if (lblStock == null) {
+			lblStock = new JLabel("Stock");
+		}
 		return lblStock;
 	}
 
@@ -179,6 +211,9 @@ public class EcranCatalogue extends JFrame {
 	 * @return the txtStock
 	 */
 	public JTextField getTxtStock() {
+		if (txtStock == null) {
+			txtStock = new JTextField(30);
+		}
 		return txtStock;
 	}
 
@@ -186,6 +221,9 @@ public class EcranCatalogue extends JFrame {
 	 * @return the lblPrix
 	 */
 	public JLabel getLblPrix() {
+		if (lblPrix == null) {
+			lblPrix = new JLabel("Prix");
+		}
 		return lblPrix;
 	}
 
@@ -193,9 +231,45 @@ public class EcranCatalogue extends JFrame {
 	 * @return the txtPrix
 	 */
 	public JTextField getTxtPrix() {
+		if (txtPrix == null) {
+			txtPrix = new JTextField(30);
+		}
 		return txtPrix;
 	}
 
+	/**
+	 * @return the lblType
+	 */
+	public JLabel getLblType() {
+		if (lblType == null) {
+			lblType = new JLabel("Type");
+		}
+		return lblType;
+	}
+
+	JRadioButton jcb = new JRadioButton("A");
+
+	/**
+	 * @return the radioTypeRamette
+	 */
+	public JRadioButton getRadioTypeRamette() {
+		if (radioTypeRamette == null) {
+			radioTypeRamette = new JRadioButton("Ramette");
+		}
+		return radioTypeRamette;
+	}
+
+	/**
+	 * @return the radioTypeStylo
+	 */
+	public JRadioButton getRadioTypeStylo() {
+		if (radioTypeStylo == null) {
+			radioTypeStylo = new JRadioButton("Stylo");
+		}
+		return radioTypeStylo;
+	}
+
+	// ==================================================================
 	/**
 	 * @return the panBoutons
 	 */
