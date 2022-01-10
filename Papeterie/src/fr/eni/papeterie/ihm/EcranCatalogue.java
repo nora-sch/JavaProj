@@ -5,7 +5,11 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,6 +34,14 @@ public class EcranCatalogue extends JFrame {
 	private JLabel lblType;
 	private JRadioButton radioTypeRamette;
 	private JRadioButton radioTypeStylo;
+
+	private JLabel lblGrammage;
+	private JCheckBox checkGrammage80;
+	private JCheckBox checkGrammage100;
+	
+	private JLabel lblCouleur;
+	private	JComboBox comboCouleur;
+//	String couleurs[] = {"jaune","blanc","bleu","vert", "rouge", "rose", "noir"}; 
 
 	// ==============
 
@@ -116,11 +128,32 @@ public class EcranCatalogue extends JFrame {
 		gbc.gridy = 5;
 		gbc.gridx = 0;
 		panel.add(getLblType(), gbc);
-		gbc.gridx = 1;
-		panel.add(getRadioTypeRamette(), gbc);
-//		panel.add(getRadioTypeStylo(), gbc);
 
-		// Ligne 8;
+		gbc.gridx = 1;
+		Box typeBox = Box.createVerticalBox();
+//		    ButtonGroup sizeGroup = new ButtonGroup();
+//		    typeGroup.add(getRadioTypeRamette());
+//		    typeGroup.add(getRadioTypeStylo());
+		typeBox.add(getRadioTypeRamette());
+		typeBox.add(getRadioTypeStylo());
+		panel.add(typeBox, gbc);
+
+		// Ligne 7
+		gbc.gridy = 6;
+		gbc.gridx = 0;
+		panel.add(getLblGrammage(), gbc);
+		gbc.gridx = 1;
+		Box gramBox = Box.createVerticalBox();
+		ButtonGroup gramGroup = new ButtonGroup();
+		gramGroup.add(getCheckGrammage80());
+		gramGroup.add(getCheckGrammage100());
+		gramBox.add(getCheckGrammage80());
+		gramBox.add(getCheckGrammage100());
+		panel.add(gramBox, gbc);
+
+		// Ligne 8
+
+		// Ligne 9;
 //		gbc.gridy = 8;
 //		gbc.gridx = 0;
 //		gbc.gridwidth = 2;
@@ -267,6 +300,57 @@ public class EcranCatalogue extends JFrame {
 			radioTypeStylo = new JRadioButton("Stylo");
 		}
 		return radioTypeStylo;
+	}
+
+	/**
+	 * @return the lblGrammage
+	 */
+	public JLabel getLblGrammage() {
+		if (lblGrammage == null) {
+			lblGrammage = new JLabel("Grammage");
+		}
+		return lblGrammage;
+	}
+
+	/**
+	 * @return the checkGrammage80
+	 */
+	public JCheckBox getCheckGrammage80() {
+		if (checkGrammage80 == null) {
+			checkGrammage80 = new JCheckBox("80 grammes");
+		}
+		return checkGrammage80;
+	}
+
+	/**
+	 * @return the checkGrammage100
+	 */
+	public JCheckBox getCheckGrammage100() {
+		if (checkGrammage100 == null) {
+			checkGrammage100 = new JCheckBox("100 grammes");
+		}
+		return checkGrammage100;
+	}
+	
+	
+	/**
+	 * @return the lblCouleur
+	 */
+	public JLabel getLblCouleur() {
+		if (lblCouleur == null) {
+			lblCouleur = new JLabel("Couleur");
+		}
+		return lblCouleur;
+	}
+
+	/**
+	 * @return the comboCouleur
+	 */
+	public JComboBox getComboCouleur() {
+		if (comboCouleur == null) {
+//			comboCouleur = new JComboBox(couleurs);
+		}
+		return comboCouleur;
 	}
 
 	// ==================================================================
