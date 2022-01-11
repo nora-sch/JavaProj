@@ -38,15 +38,19 @@ public class EcranCatalogue extends JFrame {
 	private JLabel lblGrammage;
 	private JCheckBox checkGrammage80;
 	private JCheckBox checkGrammage100;
-	
+
 	private JLabel lblCouleur;
-	private	JComboBox comboCouleur;
-//	String couleurs[] = {"jaune","blanc","bleu","vert", "rouge", "rose", "noir"}; 
+	private JComboBox<String> comboCouleur;
+	String couleurs[] = { "", "jaune", "blanc", "bleu", "vert", "rouge", "rose", "noir" };
 
 	// ==============
 
 	private JPanel panBoutons;
-	private JButton btnAjouter, btnAnnuler;
+	private JButton btnBack;
+	private JButton btnForw;
+	private JButton btnNew;
+	private JButton btnSave;
+	private JButton btnDelete;
 
 	/**
 	 * Lancer l'application.
@@ -152,12 +156,18 @@ public class EcranCatalogue extends JFrame {
 		panel.add(gramBox, gbc);
 
 		// Ligne 8
+		gbc.gridy = 7;
+		gbc.gridx = 0;
+		panel.add(getLblCouleur(), gbc);
+		gbc.gridx = 1;
+
+		panel.add(getComboCouleur(), gbc);
 
 		// Ligne 9;
-//		gbc.gridy = 8;
-//		gbc.gridx = 0;
-//		gbc.gridwidth = 2;
-//		panel.add(getPanBoutons(), gbc);
+		gbc.gridy = 8;
+		gbc.gridx = 0;
+		gbc.gridwidth = 2;
+		panel.add(getPanBoutons(), gbc);
 
 		// lier ce panel à l'écran Catalogue (affecter le panel à l'écran)
 		this.setContentPane(panel);
@@ -331,8 +341,7 @@ public class EcranCatalogue extends JFrame {
 		}
 		return checkGrammage100;
 	}
-	
-	
+
 	/**
 	 * @return the lblCouleur
 	 */
@@ -346,9 +355,9 @@ public class EcranCatalogue extends JFrame {
 	/**
 	 * @return the comboCouleur
 	 */
-	public JComboBox getComboCouleur() {
+	public JComboBox<String> getComboCouleur() {
 		if (comboCouleur == null) {
-//			comboCouleur = new JComboBox(couleurs);
+			comboCouleur = new JComboBox<String>(couleurs);
 		}
 		return comboCouleur;
 	}
@@ -362,31 +371,63 @@ public class EcranCatalogue extends JFrame {
 			// layout par default (FlowLayout) va disposer des composants les uns à coté des
 			// autres
 			panBoutons = new JPanel();
-			panBoutons.add(getBtnAjouter());
-			panBoutons.add(getBtnAnnuler());
+			panBoutons.add(getBtnBack());
+			panBoutons.add(getBtnNew());
+			panBoutons.add(getBtnSave());
+			panBoutons.add(getBtnDelete());
+			panBoutons.add(getBtnForw());
 		}
 		return panBoutons;
 	}
 
 	/**
-	 * @return the btnAjouter
+	 * @return the btnBack
 	 */
-	public JButton getBtnAjouter() {
-		if (btnAjouter == null) {
-			btnAjouter = new JButton();
+	public JButton getBtnBack() {
+		if (btnBack == null) {
+			btnBack = new JButton();
 		}
-		return btnAjouter;
+		return btnBack;
 	}
 
 	/**
-	 * @return the btnAnnuler
+	 * @return the btnForw
 	 */
-	public JButton getBtnAnnuler() {
-		if (btnAnnuler == null) {
-			btnAnnuler = new JButton();
-
+	public JButton getBtnForw() {
+		if (btnForw == null) {
+			btnForw = new JButton();
 		}
-		return btnAnnuler;
+		return btnForw;
+	}
+
+	/**
+	 * @return the btnNew
+	 */
+	public JButton getBtnNew() {
+		if (btnNew == null) {
+			btnNew = new JButton();
+		}
+		return btnNew;
+	}
+
+	/**
+	 * @return the btnSave
+	 */
+	public JButton getBtnSave() {
+		if (btnSave == null) {
+			btnSave = new JButton();
+		}
+		return btnSave;
+	}
+
+	/**
+	 * @return the btnDelete
+	 */
+	public JButton getBtnDelete() {
+		if (btnDelete == null) {
+			btnDelete = new JButton();
+		}
+		return btnDelete;
 	}
 
 }
