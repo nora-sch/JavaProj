@@ -1,5 +1,6 @@
 package fr.eni.papeterie.ihm;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
@@ -17,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,44 +27,27 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class EcranCatalogue extends JFrame implements ActionListener{
+public class EcranCatalogue extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	final int SIZE_TEXT = 25;
 
-	private JLabel lblReference;
-	private JTextField txtReference;
-	private JLabel lblDesignation;
+	private JLabel lblReference, lblDesignation, lblMarque, lblStock, lblPrix, lblType, lblGrammage, lblCouleur;
+	private JTextField txtReference, txtMarque, txtStock, txtPrix;
 	private JTextArea txtDesignation;
-//	private JTextField txtDesignation;
-	private JLabel lblMarque;
-	private JTextField txtMarque;
-	private JLabel lblStock;
-	private JTextField txtStock;
-	private JLabel lblPrix;
-	private JTextField txtPrix;
+
 	// ==============
-	private JLabel lblType;
-	private JRadioButton radioTypeRamette;
-	private JRadioButton radioTypeStylo;
 
-	private JLabel lblGrammage;
-	private JCheckBox checkGrammage80;
-	private JCheckBox checkGrammage100;
-
-	private JLabel lblCouleur;
+	private JRadioButton radioTypeRamette, radioTypeStylo;
+	private JCheckBox checkGrammage80, checkGrammage100;
 	private JComboBox<String> comboCouleur;
 	String couleurs[] = { "", "jaune", "blanc", "bleu", "vert", "rouge", "rose", "noir" };
 
 	// ==============
 
 	private JPanel panBoutons;
-	private JButton btnBack;
-	private JButton btnForw;
-	private JButton btnNew;
-	private JButton btnSave;
-	private JButton btnDelete;
+	private JButton btnBack, btnForw, btnNew, btnSave, btnDelete;
 
 	/**
 	 * Lancer l'application.
@@ -101,12 +86,13 @@ public class EcranCatalogue extends JFrame implements ActionListener{
 		GridBagConstraints gbc = new GridBagConstraints();
 
 		// ajouter les composants graphiques au panel:
-		// définir l'emplacement (des coordonnées) d'un composant graphique
+		// définir l'emplacement (des coordonnées) d'un composant graphique7
 
+		gbc.insets = new Insets(5, 5, 5, 0); // spaces between the elements
 		// Ligne 1
 		gbc.gridy = 0;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(5, 5, 5, 0); // spaces between the elements
+
 		// add elements au panel (label, constraintes du tableau)
 		panel.add(getLblReference(), gbc);
 
@@ -319,6 +305,16 @@ public class EcranCatalogue extends JFrame implements ActionListener{
 	public JRadioButton getRadioTypeRamette() {
 		if (radioTypeRamette == null) {
 			radioTypeRamette = new JRadioButton("Ramette");
+			radioTypeRamette.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					getCheckGrammage80().setEnabled(true);
+					getCheckGrammage100().setEnabled(true);
+					getComboCouleur().setEnabled(false);
+
+				}
+			});
 		}
 		return radioTypeRamette;
 	}
@@ -329,6 +325,16 @@ public class EcranCatalogue extends JFrame implements ActionListener{
 	public JRadioButton getRadioTypeStylo() {
 		if (radioTypeStylo == null) {
 			radioTypeStylo = new JRadioButton("Stylo");
+			radioTypeStylo.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					getCheckGrammage80().setEnabled(false);
+					getCheckGrammage100().setEnabled(false);
+					getComboCouleur().setEnabled(true);
+
+				}
+			});
 		}
 		return radioTypeStylo;
 	}
@@ -490,33 +496,32 @@ public class EcranCatalogue extends JFrame implements ActionListener{
 //	            	System.out.println(radioButton.getText());
 //	            }
 //	        }
-		
+
 		if (e.getSource() == btnSave) {
 
-			String reference = txtReference.getText().toString();// getting text of reference text field and storing it in a String variable
+			String reference = txtReference.getText().toString();// getting text of reference text field and storing it
+																	// in a String variable
 			String designation = txtDesignation.getText().toString();
 			String marque = txtMarque.getText().toString();
 			int stock = Integer.parseInt(txtStock.getText());
 			float prix = Float.valueOf(txtPrix.getText());
-			
-			if((radioTypeRamette.isSelected()==false)&&(radioTypeStylo.isSelected()==false)){
-				JOptionPane.showMessageDialog(null,"Please select the type of the article");
-				}
-			
-			if((checkGrammage80.isSelected()==false)&&(checkGrammage100.isSelected()==false)){
-				JOptionPane.showMessageDialog(null,"Please select the grammage of the article");
-				}
-			
-			System.out.println("reference : "+ reference);
-			System.out.println("designation : "+ designation);
-			System.out.println("marque : "+ marque);
-			System.out.println("stock : "+ stock);
-			System.out.println("prix : "+ prix);
+
+			if ((radioTypeRamette.isSelected() == false) && (radioTypeStylo.isSelected() == false)) {
+				JOptionPane.showMessageDialog(null, "Please select the type of the article");
+			}
+
+			if ((checkGrammage80.isSelected() == false) && (checkGrammage100.isSelected() == false)) {
+				JOptionPane.showMessageDialog(null, "Please select the grammage of the article");
+			}
+
+			System.out.println("reference : " + reference);
+			System.out.println("designation : " + designation);
+			System.out.println("marque : " + marque);
+			System.out.println("stock : " + stock);
+			System.out.println("prix : " + prix);
 
 		}
-		
 
 	}
-
 
 }
