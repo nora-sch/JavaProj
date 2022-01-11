@@ -4,21 +4,33 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class EcranCatalogue extends JFrame {
+public class EcranCatalogue extends JFrame implements ActionListener{
+
+	private static final long serialVersionUID = 1L;
+
+	final int SIZE_TEXT = 25;
+
 	private JLabel lblReference;
 	private JTextField txtReference;
 	private JLabel lblDesignation;
@@ -71,7 +83,8 @@ public class EcranCatalogue extends JFrame {
 	// constructeur
 	public EcranCatalogue() {
 		this.setTitle("Article");
-		this.setSize(new Dimension(500, 500));
+		this.setSize(new Dimension(400, 400));
+//		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		initIHM();
 	}
@@ -89,10 +102,11 @@ public class EcranCatalogue extends JFrame {
 
 		// ajouter les composants graphiques au panel:
 		// définir l'emplacement (des coordonnées) d'un composant graphique
+
 		// Ligne 1
 		gbc.gridy = 0;
 		gbc.gridx = 0;
-
+		gbc.insets = new Insets(5, 5, 5, 0); // spaces between the elements
 		// add elements au panel (label, constraintes du tableau)
 		panel.add(getLblReference(), gbc);
 
@@ -117,6 +131,7 @@ public class EcranCatalogue extends JFrame {
 		// Ligne 4
 		gbc.gridy = 3;
 		gbc.gridx = 0;
+
 		panel.add(getLblStock(), gbc);
 		gbc.gridx = 1;
 		panel.add(getTxtStock(), gbc);
@@ -135,9 +150,9 @@ public class EcranCatalogue extends JFrame {
 
 		gbc.gridx = 1;
 		Box typeBox = Box.createVerticalBox();
-//		    ButtonGroup sizeGroup = new ButtonGroup();
-//		    typeGroup.add(getRadioTypeRamette());
-//		    typeGroup.add(getRadioTypeStylo());
+		ButtonGroup typeGroup = new ButtonGroup();
+		typeGroup.add(getRadioTypeRamette());
+		typeGroup.add(getRadioTypeStylo());
 		typeBox.add(getRadioTypeRamette());
 		typeBox.add(getRadioTypeStylo());
 		panel.add(typeBox, gbc);
@@ -182,6 +197,8 @@ public class EcranCatalogue extends JFrame {
 	public JLabel getLblReference() {
 		if (lblReference == null) {
 			lblReference = new JLabel("Référence");
+//			lblReference.setAlignmentX(LEFT_ALIGNMENT);
+//			lblReference.setVerticalAlignment(JLabel.TOP);
 		}
 		return lblReference;
 	}
@@ -191,7 +208,7 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JTextField getTxtReference() {
 		if (txtReference == null) {
-			txtReference = new JTextField(30);
+			txtReference = new JTextField(SIZE_TEXT);
 		}
 		return txtReference;
 	}
@@ -212,9 +229,13 @@ public class EcranCatalogue extends JFrame {
 	public JTextArea getTxtDesignation() {
 		if (txtDesignation == null) {
 //			txtDesignation = new JTextField(30);
-			txtDesignation = new JTextArea(1, 30);
+			txtDesignation = new JTextArea(1, SIZE_TEXT);
 			txtDesignation.setWrapStyleWord(true);
 			txtDesignation.setLineWrap(true);
+//			Border border = BorderFactory.createLineBorder(Color.BLACK);
+//			txtDesignation.setBorder(BorderFactory.createCompoundBorder(border,
+//		            BorderFactory.createEmptyBorder(1, 1, 1, 1)
+//		            ));
 //			txtDesignation.getText().length();   // 250
 		}
 		return txtDesignation;
@@ -235,7 +256,7 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JTextField getTxtMarque() {
 		if (txtMarque == null) {
-			txtMarque = new JTextField(30);
+			txtMarque = new JTextField(SIZE_TEXT);
 		}
 		return txtMarque;
 	}
@@ -255,7 +276,7 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JTextField getTxtStock() {
 		if (txtStock == null) {
-			txtStock = new JTextField(30);
+			txtStock = new JTextField(SIZE_TEXT);
 		}
 		return txtStock;
 	}
@@ -275,7 +296,7 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JTextField getTxtPrix() {
 		if (txtPrix == null) {
-			txtPrix = new JTextField(30);
+			txtPrix = new JTextField(SIZE_TEXT);
 		}
 		return txtPrix;
 	}
@@ -385,7 +406,18 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JButton getBtnBack() {
 		if (btnBack == null) {
-			btnBack = new JButton();
+			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Back24.gif");
+//			BufferedImage buttonIcon;
+//			try {
+//				buttonIcon = ImageIO.read(new File("./src/fr/eni/papeterie/ihm/resources/img/Back24.gif"));
+//				btnBack = new JButton(new ImageIcon(buttonIcon));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+			btnBack = new JButton(icon);
+			// adding ActionListener
+			btnBack.addActionListener(this);
+
 		}
 		return btnBack;
 	}
@@ -395,7 +427,10 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JButton getBtnForw() {
 		if (btnForw == null) {
-			btnForw = new JButton();
+			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Forward24.gif");
+			btnForw = new JButton(icon);
+			// adding ActionListener
+			btnForw.addActionListener(this);
 		}
 		return btnForw;
 	}
@@ -405,7 +440,10 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JButton getBtnNew() {
 		if (btnNew == null) {
-			btnNew = new JButton();
+			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/New24.gif");
+			btnNew = new JButton(icon);
+			// adding ActionListener
+			btnNew.addActionListener(this);
 		}
 		return btnNew;
 	}
@@ -415,7 +453,10 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JButton getBtnSave() {
 		if (btnSave == null) {
-			btnSave = new JButton();
+			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Save24.gif");
+			btnSave = new JButton(icon);
+			// adding ActionListener
+			btnSave.addActionListener(this);
 		}
 		return btnSave;
 	}
@@ -425,9 +466,57 @@ public class EcranCatalogue extends JFrame {
 	 */
 	public JButton getBtnDelete() {
 		if (btnDelete == null) {
-			btnDelete = new JButton();
+			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Delete24.gif");
+			btnDelete = new JButton(icon);
+			// adding ActionListener
+			btnDelete.addActionListener(this);
 		}
 		return btnDelete;
 	}
+
+	// ==================================================
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNew) {
+			txtReference.setText(null);
+			txtDesignation.setText(null);
+			txtMarque.setText(null);
+			txtStock.setText(null);
+			txtPrix.setText(null);
+		}
+
+//		 if(e.getSource() instanceof JRadioButton){
+//	            JRadioButton radioButton = (JRadioButton) e.getSource();
+//	            if(radioButton.isSelected()){
+//	            	System.out.println(radioButton.getText());
+//	            }
+//	        }
+		
+		if (e.getSource() == btnSave) {
+
+			String reference = txtReference.getText().toString();// getting text of reference text field and storing it in a String variable
+			String designation = txtDesignation.getText().toString();
+			String marque = txtMarque.getText().toString();
+			int stock = Integer.parseInt(txtStock.getText());
+			float prix = Float.valueOf(txtPrix.getText());
+			
+			if((radioTypeRamette.isSelected()==false)&&(radioTypeStylo.isSelected()==false)){
+				JOptionPane.showMessageDialog(null,"Please select the type of the article");
+				}
+			
+			if((checkGrammage80.isSelected()==false)&&(checkGrammage100.isSelected()==false)){
+				JOptionPane.showMessageDialog(null,"Please select the grammage of the article");
+				}
+			
+			System.out.println("reference : "+ reference);
+			System.out.println("designation : "+ designation);
+			System.out.println("marque : "+ marque);
+			System.out.println("stock : "+ stock);
+			System.out.println("prix : "+ prix);
+
+		}
+		
+
+	}
+
 
 }
