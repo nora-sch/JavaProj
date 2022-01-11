@@ -1,6 +1,5 @@
 package fr.eni.papeterie.bll;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.papeterie.bo.Article;

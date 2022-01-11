@@ -1,6 +1,5 @@
 package fr.eni.papeterie.ihm;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
@@ -8,17 +7,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,7 +22,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class EcranCatalogue extends JFrame implements ActionListener {
+public class EcranArticle extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,11 +37,11 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	private JRadioButton radioTypeRamette, radioTypeStylo;
 	private JCheckBox checkGrammage80, checkGrammage100;
 	private JComboBox<String> comboCouleur;
-	String couleurs[] = { "", "jaune", "blanc", "bleu", "vert", "rouge", "rose", "noir" };
+	String couleurs[] = { "jaune", "blanc", "bleu", "vert", "rouge", "rose", "noir" };
 
 	// ==============
 
-	private JPanel panBoutons;
+	private JPanel panBoutons, panType;
 	private JButton btnBack, btnForw, btnNew, btnSave, btnDelete;
 
 	/**
@@ -56,7 +51,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EcranCatalogue frame = new EcranCatalogue();
+					EcranArticle frame = new EcranArticle();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,12 +61,13 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	}
 
 	// constructeur
-	public EcranCatalogue() {
+	public EcranArticle() {
 		this.setTitle("Article");
 		this.setSize(new Dimension(400, 400));
 //		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		initIHM();
+		pack();
 	}
 
 	// organiser l'écran
@@ -88,7 +84,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 		// ajouter les composants graphiques au panel:
 		// définir l'emplacement (des coordonnées) d'un composant graphique7
 
-		gbc.insets = new Insets(5, 5, 5, 0); // spaces between the elements
+		gbc.insets = new Insets(5, 5, 5, 5); // spaces between the elements
 		// Ligne 1
 		gbc.gridy = 0;
 		gbc.gridx = 0;
@@ -133,29 +129,23 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 		gbc.gridy = 5;
 		gbc.gridx = 0;
 		panel.add(getLblType(), gbc);
-
 		gbc.gridx = 1;
-		Box typeBox = Box.createVerticalBox();
-		ButtonGroup typeGroup = new ButtonGroup();
-		typeGroup.add(getRadioTypeRamette());
-		typeGroup.add(getRadioTypeStylo());
-		typeBox.add(getRadioTypeRamette());
-		typeBox.add(getRadioTypeStylo());
-		panel.add(typeBox, gbc);
-
+		panel.add(getPanType(), gbc);
+		
+		
 		// Ligne 7
 		gbc.gridy = 6;
 		gbc.gridx = 0;
 		panel.add(getLblGrammage(), gbc);
 		gbc.gridx = 1;
-		Box gramBox = Box.createVerticalBox();
-		ButtonGroup gramGroup = new ButtonGroup();
-		gramGroup.add(getCheckGrammage80());
-		gramGroup.add(getCheckGrammage100());
-		gramBox.add(getCheckGrammage80());
-		gramBox.add(getCheckGrammage100());
-		panel.add(gramBox, gbc);
-
+		Box boxGram = Box.createVerticalBox();
+		ButtonGroup groupGram = new ButtonGroup();
+		groupGram.add(getCheckGrammage80());
+		groupGram.add(getCheckGrammage100());
+		boxGram.add(getCheckGrammage80());
+		boxGram.add(getCheckGrammage100());
+		panel.add(boxGram, gbc);
+		
 		// Ligne 8
 		gbc.gridy = 7;
 		gbc.gridx = 0;
@@ -183,8 +173,6 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	public JLabel getLblReference() {
 		if (lblReference == null) {
 			lblReference = new JLabel("Référence");
-//			lblReference.setAlignmentX(LEFT_ALIGNMENT);
-//			lblReference.setVerticalAlignment(JLabel.TOP);
 		}
 		return lblReference;
 	}
@@ -288,6 +276,22 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	}
 
 	/**
+	 * @return the panType
+	 */
+	public JPanel getPanType() {
+		if (panType == null) {
+			panType = new JPanel();
+			panType.setLayout(new BoxLayout(panType, BoxLayout.Y_AXIS));
+			panType.add(getRadioTypeRamette());
+			panType.add(getRadioTypeStylo());
+			ButtonGroup groupType = new ButtonGroup();
+			groupType.add(getRadioTypeRamette());
+			groupType.add(getRadioTypeStylo());		
+		}
+		return panType;
+	}
+
+	/**
 	 * @return the lblType
 	 */
 	public JLabel getLblType() {
@@ -308,9 +312,10 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 			radioTypeRamette.addActionListener(new ActionListener() {
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent ev) {
 					getCheckGrammage80().setEnabled(true);
 					getCheckGrammage100().setEnabled(true);
+					getComboCouleur().setSelectedItem(null);
 					getComboCouleur().setEnabled(false);
 
 				}
@@ -328,9 +333,12 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 			radioTypeStylo.addActionListener(new ActionListener() {
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent ev) {
+				
 					getCheckGrammage80().setEnabled(false);
 					getCheckGrammage100().setEnabled(false);
+//					getCheckGrammage80().setSelected(false);
+//					getCheckGrammage100().setSelected(false);
 					getComboCouleur().setEnabled(true);
 
 				}
@@ -385,6 +393,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	public JComboBox<String> getComboCouleur() {
 		if (comboCouleur == null) {
 			comboCouleur = new JComboBox<String>(couleurs);
+//			comboCouleur.setSize(new Dimension(320, 100));
 		}
 		return comboCouleur;
 	}
@@ -412,14 +421,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	 */
 	public JButton getBtnBack() {
 		if (btnBack == null) {
-			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Back24.gif");
-//			BufferedImage buttonIcon;
-//			try {
-//				buttonIcon = ImageIO.read(new File("./src/fr/eni/papeterie/ihm/resources/img/Back24.gif"));
-//				btnBack = new JButton(new ImageIcon(buttonIcon));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Back24.gif"));
 			btnBack = new JButton(icon);
 			// adding ActionListener
 			btnBack.addActionListener(this);
@@ -433,7 +435,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	 */
 	public JButton getBtnForw() {
 		if (btnForw == null) {
-			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Forward24.gif");
+			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Forward24.gif"));
 			btnForw = new JButton(icon);
 			// adding ActionListener
 			btnForw.addActionListener(this);
@@ -446,7 +448,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	 */
 	public JButton getBtnNew() {
 		if (btnNew == null) {
-			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/New24.gif");
+			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/New24.gif"));
 			btnNew = new JButton(icon);
 			// adding ActionListener
 			btnNew.addActionListener(this);
@@ -459,7 +461,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	 */
 	public JButton getBtnSave() {
 		if (btnSave == null) {
-			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Save24.gif");
+			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Save24.gif"));
 			btnSave = new JButton(icon);
 			// adding ActionListener
 			btnSave.addActionListener(this);
@@ -472,7 +474,7 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 	 */
 	public JButton getBtnDelete() {
 		if (btnDelete == null) {
-			Icon icon = new ImageIcon("./src/fr/eni/papeterie/ihm/resources/img/Delete24.gif");
+			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Delete24.gif"));
 			btnDelete = new JButton(icon);
 			// adding ActionListener
 			btnDelete.addActionListener(this);
@@ -480,9 +482,14 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 		return btnDelete;
 	}
 
+	
 	// ==================================================
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnNew) {
+	public void afficherNouveau() {
+		// Par défaut un article est une rammette
+	}
+	// ==================================================
+	public void actionPerformed(ActionEvent ev) {
+		if (ev.getSource() == btnNew) {
 			txtReference.setText(null);
 			txtDesignation.setText(null);
 			txtMarque.setText(null);
@@ -490,15 +497,8 @@ public class EcranCatalogue extends JFrame implements ActionListener {
 			txtPrix.setText(null);
 		}
 
-//		 if(e.getSource() instanceof JRadioButton){
-//	            JRadioButton radioButton = (JRadioButton) e.getSource();
-//	            if(radioButton.isSelected()){
-//	            	System.out.println(radioButton.getText());
-//	            }
-//	        }
-
-		if (e.getSource() == btnSave) {
-
+		if (ev.getSource() == btnSave) {
+			// Stringbuffer error msg to show in JOptionPane.showMessageDialog(null, "xxxxxxxxxxxxx");
 			String reference = txtReference.getText().toString();// getting text of reference text field and storing it
 																	// in a String variable
 			String designation = txtDesignation.getText().toString();
