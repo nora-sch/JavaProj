@@ -93,7 +93,7 @@ public class ArticleController {
 		index = catalogue.size(); // le nouveau index pour nouveau article est un nombre de la taille de liste
 		// existante (si 10 articles déjà dans la liste - le dernièr index est 9 donc le
 		// nouveau sera 10)
-		// TODO connect Ecran
+
 		frame.afficherNouveau();
 		System.out.println(index);
 
@@ -108,13 +108,38 @@ public class ArticleController {
 	 */
 	public void enregister() {
 		// Here article is an instance of Article created in EcranArticle method getArticle() // EcranArticle -> BO
-		
+
 		Article article = frame.getArticle();
-		
+
 		// id can be null or existing in catalog
-		// if new Article (id = null) - save (index will be created in database)
-		// if existing article - get id and update
-				
+
+		if(article.getIdArticle()==null) {
+			// if new Article (id = null) - save (index will be created in database)
+			try {
+				// save to db
+				manager.addArticle(article);
+				// save to list
+				catalogue.add(article);
+				// display article
+				frame.afficherArticle(article);
+			} catch (BLLException e) {
+				e.printStackTrace();
+			}
+		}else {
+			// if existing article - get id and update
+			try {
+				// update article in db
+				manager.updateArticle(article);
+				// update article in catalog by its ID
+				catalogue.set(index, article);
+				// display article
+				frame.afficherArticle(article);
+			} catch (BLLException e) {
+				e.printStackTrace();
+			}
+		}
+
+
 		frame.afficherArticle(article);
 
 	}

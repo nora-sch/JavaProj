@@ -522,7 +522,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 				//-----
 			}
 
-			if ((checkGrammage80.isSelected() == false) && (checkGrammage100.isSelected() == false)) {
+			if ((radioTypeRamette.isSelected() == true)&&(checkGrammage80.isSelected() == false) && (checkGrammage100.isSelected() == false)) {
 				JOptionPane.showMessageDialog(null, "Please select the grammage of the article");
 			}
 
