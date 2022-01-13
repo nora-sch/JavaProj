@@ -27,6 +27,15 @@ public class ArticleController {
 				instance = new ArticleController();
 				instance.frame = new EcranArticle();
 				instance.frame.setVisible(true);
+
+				try {
+					instance.manager = new CatalogueManager();
+					instance.catalogue = instance.manager.getCatalogue();
+					instance.first();
+				} catch (BLLException e) {
+					e.printStackTrace();
+				}
+
 			}
 		});
 	}
@@ -35,12 +44,13 @@ public class ArticleController {
 	 * instantiate CatalogManager and gets catalog of Articles List<Article>
 	 */
 	private ArticleController() {
-		try {
-			manager = new CatalogueManager();
-			catalogue = manager.getCatalogue();
-		} catch (BLLException e) {
-			e.printStackTrace();
-		}
+//		try {
+			//			manager = new CatalogueManager();
+			//			catalogue = manager.getCatalogue();
+//			first();
+//		} catch (BLLException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	// SINGLETON  - instantiation only ONE time
@@ -57,9 +67,14 @@ public class ArticleController {
 	 * get the first article and display it on Ecran
 	 */
 	public void first() {
-		Article a = catalogue.get(0); // get first article from catalog List
-		System.out.println(a);
-		// TODO connect Ecran
+		if(catalogue.size()>0) {
+			Article article = catalogue.get(0); // get first article from catalog List
+			System.out.println(article);
+			// TODO connect Ecran
+			frame.afficherArticle(article);
+		}else {
+			frame.afficherNouveau();
+		}
 	}
 	/*
 	 * get the previous article display it on Ecran

@@ -347,7 +347,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 					getCheckGrammage100().setEnabled(false);
 					groupGram.clearSelection();
 					getComboCouleur().setEnabled(true);
-				
+
 
 				}
 			});
@@ -499,7 +499,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 			//			txtStock.setText(null);
 			//			txtPrix.setText(null);
 			// TODO !!!!!!!!
-			
+
 			// call to Controller method nouveau() what will use method afficherNouveau() of this EcranArticle
 			// afficherNouveau() and create new index which will be saved on Save button listener action (method enregister() of Controller);
 			ArticleController.getInstance().nouveau();
@@ -530,9 +530,9 @@ public class EcranArticle extends JFrame implements ActionListener {
 			// Save and display Article
 			ArticleController.getInstance().enregister();
 			// put these two fonctions in ArticleController
-//			Article art = getArticle();
-//			afficherArticle(art);
-	
+			//			Article art = getArticle();
+			//			afficherArticle(art);
+
 		}
 
 	}
@@ -541,26 +541,23 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 	/*
 	 * display the empty form
-	 * where default new article (new instance) is Ramette // BO layer
 	 */
 	public void afficherNouveau() {
-		// Par défaut un article est une rammette
-		// Integer idArticle, String marque, String ref, String designation, float pu, int qte, int grammage
-//		Ramette article = new Ramette(null, "", "", "", 0.0f, 0, 0);
-//		afficherArticle(article);
-		
-					txtReference.setText("");
-					txtDesignation.setText("");
-					txtMarque.setText("");
-					txtStock.setText("");
-					txtPrix.setText("");
-					// deselection 
-					groupType.clearSelection();
-					groupGram.clearSelection();
-					checkGrammage80.setEnabled(false);
-					checkGrammage100.setEnabled(false);
-					comboCouleur.setSelectedItem(null);
-					comboCouleur.setEnabled(false);
+		idCurrent = null;
+		txtReference.setText("");
+		txtDesignation.setText("");
+		txtMarque.setText("");
+		txtStock.setText("");
+		txtPrix.setText("");
+		getRadioTypeStylo().setEnabled(true);
+		getRadioTypeRamette().setEnabled(true);
+		// deselection 
+		groupType.clearSelection();
+		groupGram.clearSelection();
+		checkGrammage80.setEnabled(false);
+		checkGrammage100.setEnabled(false);
+		comboCouleur.setSelectedItem(null);
+		comboCouleur.setEnabled(false);
 	}
 	/*
 	 * display the article in form fields
@@ -574,20 +571,24 @@ public class EcranArticle extends JFrame implements ActionListener {
 		getTxtMarque().setText(article.getMarque());
 		getTxtStock().setText(String.valueOf(article.getQteStock()));
 		getTxtPrix().setText(String.valueOf(article.getPrixUnitaire()));
-//		if (article.getClass().equals(Stylo.class)) {
+		//		if (article.getClass().equals(Stylo.class)) {
 		if(article instanceof Stylo) {
 			getRadioTypeStylo().setSelected(true);
+			getRadioTypeStylo().setEnabled(false);
 			getRadioTypeRamette().setSelected(false);
-//			getCheckGrammage80().setEnabled(false);
-//			getCheckGrammage100().setEnabled(false);
-//			groupGram.clearSelection();
+			getRadioTypeRamette().setEnabled(false);
+			//			getCheckGrammage80().setEnabled(false);
+			//			getCheckGrammage100().setEnabled(false);
+			//			groupGram.clearSelection();
 			getCheckGrammage80().setSelected(false);
 			getCheckGrammage100().setSelected(false);
 			getComboCouleur().setEnabled(true);
 			getComboCouleur().setSelectedItem(((Stylo)article).getCouleur());
 		}
 		else {
+			getRadioTypeStylo().setEnabled(false);
 			getRadioTypeStylo().setSelected(false);
+			getRadioTypeRamette().setEnabled(false);
 			getRadioTypeRamette().setSelected(true);
 			getCheckGrammage80().setEnabled(true);
 			getCheckGrammage100().setEnabled(true);
@@ -624,7 +625,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 			article.setPrixUnitaire(Float.parseFloat(getTxtPrix().getText()));
 			article.setQteStock(Integer.parseInt(getTxtStock().getText()));
 			if (getComboCouleur().isEnabled()) {
-//				((Stylo)article).setCouleur( (String) getComboCouleur().getSelectedItem());
+				//				((Stylo)article).setCouleur( (String) getComboCouleur().getSelectedItem());
 				((Stylo)article).setCouleur(getComboCouleur().getSelectedItem().toString());
 			} else {
 				((Ramette) article).setGrammage(getCheckGrammage80().isSelected()?80:100);
