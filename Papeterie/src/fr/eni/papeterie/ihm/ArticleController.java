@@ -51,6 +51,14 @@ public class ArticleController {
 
 	//  ============= methods =================
 	/*
+	 * get the first article and display it on Ecran
+	 */
+	public void first() {
+		Article a = catalogue.get(0); // get first article from catalog List
+		System.out.println(a);
+		// TODO connect Ecran
+	}
+	/*
 	 * get the previous article display it on Ecran
 	 */
 	public void precedent() {

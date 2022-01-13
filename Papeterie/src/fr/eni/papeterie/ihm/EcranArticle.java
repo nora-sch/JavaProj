@@ -31,8 +31,8 @@ public class EcranArticle extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	final int SIZE_TEXT = 25;
-	
-	private int idCurrent;
+
+	private Integer idCurrent;
 
 	private JLabel lblReference, lblDesignation, lblMarque, lblStock, lblPrix, lblType, lblGrammage, lblCouleur;
 	private JTextField txtReference, txtMarque, txtStock, txtPrix;
@@ -492,14 +492,18 @@ public class EcranArticle extends JFrame implements ActionListener {
 	// ============== EVENT LISTENERS ===========
 	public void actionPerformed(ActionEvent ev) {
 		if (ev.getSource() == btnNew) {
-			txtReference.setText(null);
-			txtDesignation.setText(null);
-			txtMarque.setText(null);
-			txtStock.setText(null);
-			txtPrix.setText(null);
+			//			txtReference.setText(null);
+			//			txtDesignation.setText(null);
+			//			txtMarque.setText(null);
+			//			txtStock.setText(null);
+			//			txtPrix.setText(null);
+			// TODO !!!!!!!!
+			afficherNouveau();
+
 		}
 
 		if (ev.getSource() == btnSave) {
+			// validation before Save Article:
 			// Stringbuffer error msg to show in JOptionPane.showMessageDialog(null, "xxxxxxxxxxxxx");
 			String reference = txtReference.getText().toString();// getting text of reference text field and storing it
 			// in a String variable
@@ -510,31 +514,80 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 			if ((radioTypeRamette.isSelected() == false) && (radioTypeStylo.isSelected() == false)) {
 				JOptionPane.showMessageDialog(null, "Please select the type of the article");
+			} else {
+				//-----
 			}
 
 			if ((checkGrammage80.isSelected() == false) && (checkGrammage100.isSelected() == false)) {
 				JOptionPane.showMessageDialog(null, "Please select the grammage of the article");
 			}
 
-			System.out.println("reference : " + reference);
-			System.out.println("designation : " + designation);
-			System.out.println("marque : " + marque);
-			System.out.println("stock : " + stock);
-			System.out.println("prix : " + prix);
 
+			// Save and display Article
+			ArticleController.getInstance().enregister();
+			// put these two fonctions in ArticleController
+			Article art = getArticle();
+			afficherArticle(art);
+			System.out.println(art.toString());
 		}
 
 	}
 
 	// ============== EXCHANGE WITH ARTICLE CONTROLLER ===========
+
+	/*
+	 * display the empty form
+	 * where default new article (new instance) is Ramette // BO layer
+	 */
+	public void afficherNouveau() {
+		// Par défaut un article est une rammette
+		// Integer idArticle, String marque, String ref, String designation, float pu, int qte, int grammage
+		Ramette article = new Ramette(null, "", "", "", 0.0f, 0, 0);
+		afficherArticle(article);
+	}
+	/*
+	 * display the article in form fields
+	 * BO layer, BLL layer via Controller -> CatalogueManager
+	 */
+	public void afficherArticle(Article article) {
+		idCurrent = article.getIdArticle();		
+
+		getTxtReference().setText(article.getReference());
+		getTxtDesignation().setText(article.getDesignation());
+		getTxtMarque().setText(article.getMarque());
+		getTxtStock().setText(String.valueOf(article.getQteStock()));
+		getTxtPrix().setText(String.valueOf(article.getPrixUnitaire()));
+		if (article.getClass().equals(Stylo.class)) {
+			getRadioTypeStylo().setSelected(true);
+			getCheckGrammage80().setEnabled(false);
+			getCheckGrammage100().setEnabled(false);
+			getComboCouleur().setEnabled(true);
+			getComboCouleur().setSelectedItem(((Stylo)article).getCouleur());
+		}
+		else {
+			getRadioTypeRamette().setSelected(true);
+			getCheckGrammage80().setEnabled(true);
+			getCheckGrammage100().setEnabled(true);
+			if(((Ramette)article).getGrammage() == 80) {
+				getCheckGrammage80().setSelected(true);
+			}
+			else {
+				getCheckGrammage100().setSelected(true);
+			}
+			getComboCouleur().setEnabled(false);
+			getComboCouleur().setSelectedItem(null);
+		}
+
+
+	}
 	/*
 	 * get article information from form
 	 * and instantiate new article // BO layer
 	 */
 	public Article getArticle() {
-		
+
 		Article article=null;
-		
+
 		if(getRadioTypeStylo().isSelected()){
 			article = new Stylo();
 		}else{
@@ -552,27 +605,13 @@ public class EcranArticle extends JFrame implements ActionListener {
 			} else {
 				((Ramette) article).setGrammage(getCheckGrammage80().isSelected()?80:100);
 			}
+			System.out.println(article);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return article;
 	}
 
-	/*
-	 * display the empty form
-	 * where default new article (new instance) is Ramette // BO layer
-	 */
-	public void afficherNouveau() {
-		// Par défaut un article est une rammette
-	}
-
-	/*
-	 * display the article in form fields
-	 * BO layer, BLL layer via Controller -> CatalogueManager
-	 */
-	public void afficherArticle(Article article) {
-		// Par défaut un article est une rammette
-	}
 
 	/*
 	 * popup modal for display the errors
