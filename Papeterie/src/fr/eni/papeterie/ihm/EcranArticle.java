@@ -1,5 +1,6 @@
 package fr.eni.papeterie.ihm;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
@@ -32,7 +33,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 	final int SIZE_TEXT = 25;
 
-	private Integer idCurrent;
+	private Integer idCurrent; // index of Article in db  - null for new, Integer if exist already
 
 	private JLabel lblReference, lblDesignation, lblMarque, lblStock, lblPrix, lblType, lblGrammage, lblCouleur;
 	private JTextField txtReference, txtMarque, txtStock, txtPrix;
@@ -496,20 +497,30 @@ public class EcranArticle extends JFrame implements ActionListener {
 			// call to Controller method precedent() what will use method from EcranArticle
 			// afficherArticle() using article from catalog (BO);
 			ArticleController.getInstance().precedent();
-
+			System.out.println(ArticleController.getInstance().getFirstId());
+			if(idCurrent==ArticleController.getInstance().getFirstId()) {
+				panBoutons.remove(btnBack);
+			}else {
+				panBoutons.add(btnForw);
+			}
 		}
+		
 		if (ev.getSource() == btnForw) {
 			// call to Controller method suivant() what will use method from EcranArticle
 			// afficherArticle() using article from catalog (BO);
 			ArticleController.getInstance().suivant();
-
+			System.out.println(ArticleController.getInstance().getLastId());
+			if(idCurrent==ArticleController.getInstance().getLastId()){
+				panBoutons.remove(btnForw);
+			}else {
+				panBoutons.add(btnBack);
+			}
 		}
 		if (ev.getSource() == btnNew) {
 
 			// call to Controller method nouveau() what will use method afficherNouveau() of this EcranArticle
 			// afficherNouveau() and create new index which will be saved on Save button listener action (method enregister() of Controller);
 			ArticleController.getInstance().nouveau();
-
 		}
 
 		if (ev.getSource() == btnSave) {
@@ -537,8 +548,9 @@ public class EcranArticle extends JFrame implements ActionListener {
 		}
 		if (ev.getSource() == btnDelete) {
 
-			// call to Controller method nouveau() what will use method afficherNouveau() of this EcranArticle
-			// afficherNouveau() and create new index which will be saved on Save button listener action (method enregister() of Controller);
+			// call to Controller method supprimer() what will delete article from db
+			// and call afficherNouveau() if no more articles in the list
+			// or afficherArticle() if there is next article in the list
 			ArticleController.getInstance().suprimer();
 
 		}

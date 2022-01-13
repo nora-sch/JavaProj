@@ -11,7 +11,7 @@ import fr.eni.papeterie.bo.Article;
 public class ArticleController {
 	private CatalogueManager manager;
 	private List<Article> catalogue;
-	private int index;
+	private int index; // index of Article in catalogu (List) not db!
 
 	private EcranArticle frame ;
 
@@ -172,8 +172,11 @@ public class ArticleController {
 		}
 	}
 
-	//	public List<Article> getCatalogue() {
-	//		return catalogue;
-	//	}
+	public int getFirstId() {
+		return	catalogue.get(0).getIdArticle();
+	}
+	public int getLastId() {
+		return	catalogue.get(catalogue.size()-1).getIdArticle();
+	}
 
 }
