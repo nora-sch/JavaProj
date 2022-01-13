@@ -492,13 +492,19 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 	// ============== EVENT LISTENERS ===========
 	public void actionPerformed(ActionEvent ev) {
+		if (ev.getSource() == btnBack) {
+			// call to Controller method precedent() what will use method from EcranArticle
+			// afficherArticle() using article from catalog (BO);
+			ArticleController.getInstance().precedent();
+
+		}
+		if (ev.getSource() == btnForw) {
+			// call to Controller method suivant() what will use method from EcranArticle
+			// afficherArticle() using article from catalog (BO);
+			ArticleController.getInstance().suivant();
+
+		}
 		if (ev.getSource() == btnNew) {
-			//			txtReference.setText(null);
-			//			txtDesignation.setText(null);
-			//			txtMarque.setText(null);
-			//			txtStock.setText(null);
-			//			txtPrix.setText(null);
-			// TODO !!!!!!!!
 
 			// call to Controller method nouveau() what will use method afficherNouveau() of this EcranArticle
 			// afficherNouveau() and create new index which will be saved on Save button listener action (method enregister() of Controller);
@@ -518,10 +524,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 			if ((radioTypeRamette.isSelected() == false) && (radioTypeStylo.isSelected() == false)) {
 				JOptionPane.showMessageDialog(null, "Please select the type of the article");
-			} else {
-				//-----
-			}
-
+			} 
 			if ((radioTypeRamette.isSelected() == true)&&(checkGrammage80.isSelected() == false) && (checkGrammage100.isSelected() == false)) {
 				JOptionPane.showMessageDialog(null, "Please select the grammage of the article");
 			}
@@ -529,12 +532,16 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 			// Save and display Article
 			ArticleController.getInstance().enregister();
-			// put these two fonctions in ArticleController
-			//			Article art = getArticle();
-			//			afficherArticle(art);
+
 
 		}
+		if (ev.getSource() == btnDelete) {
 
+			// call to Controller method nouveau() what will use method afficherNouveau() of this EcranArticle
+			// afficherNouveau() and create new index which will be saved on Save button listener action (method enregister() of Controller);
+			ArticleController.getInstance().suprimer();
+
+		}
 	}
 
 	// ============== EXCHANGE WITH ARTICLE CONTROLLER ===========

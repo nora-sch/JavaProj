@@ -44,13 +44,13 @@ public class ArticleController {
 	 * instantiate CatalogManager and gets catalog of Articles List<Article>
 	 */
 	private ArticleController() {
-//		try {
-			//			manager = new CatalogueManager();
-			//			catalogue = manager.getCatalogue();
-//			first();
-//		} catch (BLLException e) {
-//			e.printStackTrace();
-//		}
+		//		try {
+		//			manager = new CatalogueManager();
+		//			catalogue = manager.getCatalogue();
+		//			first();
+		//		} catch (BLLException e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 	// SINGLETON  - instantiation only ONE time
@@ -82,8 +82,8 @@ public class ArticleController {
 	public void precedent() {
 		if (index > 0) {
 			index--;
-			catalogue.get(index); // récupére l'article de la liste Article (catalogue) par son index
-			// TODO connect Ecran
+			Article article = catalogue.get(index); // récupére l'article de la liste Article (catalogue) par son index
+			frame.afficherArticle(article);
 		}
 
 	}
@@ -94,8 +94,8 @@ public class ArticleController {
 	public void suivant() {
 		if (index < catalogue.size() - 1) {
 			index++;
-			catalogue.get(index);
-			// TODO connect Ecran
+			Article article = catalogue.get(index);
+			frame.afficherArticle(article);
 		}
 	}
 
