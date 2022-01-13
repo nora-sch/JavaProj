@@ -43,12 +43,13 @@ public class EcranArticle extends JFrame implements ActionListener {
 	private JRadioButton radioTypeRamette, radioTypeStylo;
 	private JCheckBox checkGrammage80, checkGrammage100;
 	private JComboBox<String> comboCouleur;
-	String couleurs[] = { "jaune", "blanc", "bleu", "vert", "rouge", "rose", "noir" };
+	String couleurs[] = {"",  "jaune", "blanc", "bleu", "vert", "rouge", "rose", "noir" };
 
 	// ==============
 
 	private JPanel panBoutons, panType;
 	private JButton btnBack, btnForw, btnNew, btnSave, btnDelete;
+	ButtonGroup groupType, groupGram;
 
 	/**
 	 * Lancer l'application.
@@ -148,7 +149,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 		panel.add(getLblGrammage(), gbc);
 		gbc.gridx = 1;
 		Box boxGram = Box.createVerticalBox();
-		ButtonGroup groupGram = new ButtonGroup();
+		groupGram = new ButtonGroup();
 		groupGram.add(getCheckGrammage80());
 		groupGram.add(getCheckGrammage100());
 		boxGram.add(getCheckGrammage80());
@@ -293,7 +294,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 			panType.setLayout(new BoxLayout(panType, BoxLayout.Y_AXIS));
 			panType.add(getRadioTypeRamette());
 			panType.add(getRadioTypeStylo());
-			ButtonGroup groupType = new ButtonGroup();
+			groupType = new ButtonGroup();
 			groupType.add(getRadioTypeRamette());
 			groupType.add(getRadioTypeStylo());		
 		}
@@ -344,9 +345,9 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 					getCheckGrammage80().setEnabled(false);
 					getCheckGrammage100().setEnabled(false);
-					//					getCheckGrammage80().setSelected(false);
-					//					getCheckGrammage100().setSelected(false);
+					groupGram.clearSelection();
 					getComboCouleur().setEnabled(true);
+				
 
 				}
 			});
@@ -498,7 +499,10 @@ public class EcranArticle extends JFrame implements ActionListener {
 			//			txtStock.setText(null);
 			//			txtPrix.setText(null);
 			// TODO !!!!!!!!
-			afficherNouveau();
+			
+			// call to Controller method nouveau() what will use method afficherNouveau() of this EcranArticle
+			// afficherNouveau() and create new index which will be saved on Save button listener action (method enregister() of Controller);
+			ArticleController.getInstance().nouveau();
 
 		}
 
@@ -526,9 +530,9 @@ public class EcranArticle extends JFrame implements ActionListener {
 			// Save and display Article
 			ArticleController.getInstance().enregister();
 			// put these two fonctions in ArticleController
-			Article art = getArticle();
-			afficherArticle(art);
-			System.out.println(art.toString());
+//			Article art = getArticle();
+//			afficherArticle(art);
+	
 		}
 
 	}
@@ -542,12 +546,25 @@ public class EcranArticle extends JFrame implements ActionListener {
 	public void afficherNouveau() {
 		// Par défaut un article est une rammette
 		// Integer idArticle, String marque, String ref, String designation, float pu, int qte, int grammage
-		Ramette article = new Ramette(null, "", "", "", 0.0f, 0, 0);
-		afficherArticle(article);
+//		Ramette article = new Ramette(null, "", "", "", 0.0f, 0, 0);
+//		afficherArticle(article);
+		
+					txtReference.setText("");
+					txtDesignation.setText("");
+					txtMarque.setText("");
+					txtStock.setText("");
+					txtPrix.setText("");
+					// deselection 
+					groupType.clearSelection();
+					groupGram.clearSelection();
+					checkGrammage80.setEnabled(false);
+					checkGrammage100.setEnabled(false);
+					comboCouleur.setSelectedItem(null);
+					comboCouleur.setEnabled(false);
 	}
 	/*
 	 * display the article in form fields
-	 * BO layer, BLL layer via Controller -> CatalogueManager
+	 * BO layer (if new article), BLL layer via Controller -> CatalogueManager (if article in catalog)
 	 */
 	public void afficherArticle(Article article) {
 		idCurrent = article.getIdArticle();		
@@ -557,14 +574,20 @@ public class EcranArticle extends JFrame implements ActionListener {
 		getTxtMarque().setText(article.getMarque());
 		getTxtStock().setText(String.valueOf(article.getQteStock()));
 		getTxtPrix().setText(String.valueOf(article.getPrixUnitaire()));
-		if (article.getClass().equals(Stylo.class)) {
+//		if (article.getClass().equals(Stylo.class)) {
+		if(article instanceof Stylo) {
 			getRadioTypeStylo().setSelected(true);
-			getCheckGrammage80().setEnabled(false);
-			getCheckGrammage100().setEnabled(false);
+			getRadioTypeRamette().setSelected(false);
+//			getCheckGrammage80().setEnabled(false);
+//			getCheckGrammage100().setEnabled(false);
+//			groupGram.clearSelection();
+			getCheckGrammage80().setSelected(false);
+			getCheckGrammage100().setSelected(false);
 			getComboCouleur().setEnabled(true);
 			getComboCouleur().setSelectedItem(((Stylo)article).getCouleur());
 		}
 		else {
+			getRadioTypeStylo().setSelected(false);
 			getRadioTypeRamette().setSelected(true);
 			getCheckGrammage80().setEnabled(true);
 			getCheckGrammage100().setEnabled(true);
@@ -594,14 +617,15 @@ public class EcranArticle extends JFrame implements ActionListener {
 			article = new Ramette();
 		}
 		try {
-			article.setIdArticle(idCurrent); // id  - null if new, id if from catalogue (ArticleController -> BLL / BLL -> ArticleController getCatalogue() -> EcranArticle.afficherArticle() )
+			article.setIdArticle(idCurrent); // id: null if new, existing id if from catalogue (ArticleController -> BLL / BLL -> ArticleController getCatalogue() -> EcranArticle.afficherArticle() )
 			article.setReference(getTxtReference().getText());
 			article.setMarque(getTxtMarque().getText());
 			article.setDesignation(getTxtDesignation().getText());
 			article.setPrixUnitaire(Float.parseFloat(getTxtPrix().getText()));
 			article.setQteStock(Integer.parseInt(getTxtStock().getText()));
 			if (getComboCouleur().isEnabled()) {
-				((Stylo)article).setCouleur( (String) getComboCouleur().getSelectedItem());
+//				((Stylo)article).setCouleur( (String) getComboCouleur().getSelectedItem());
+				((Stylo)article).setCouleur(getComboCouleur().getSelectedItem().toString());
 			} else {
 				((Ramette) article).setGrammage(getCheckGrammage80().isSelected()?80:100);
 			}

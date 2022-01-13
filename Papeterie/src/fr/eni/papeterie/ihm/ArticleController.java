@@ -13,6 +13,8 @@ public class ArticleController {
 	private List<Article> catalogue;
 	private int index;
 
+	private EcranArticle frame ;
+
 	// SINGLETON
 	private static ArticleController instance;
 
@@ -22,8 +24,9 @@ public class ArticleController {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run() {
-				EcranArticle frame = new EcranArticle();
-				frame.setVisible(true);
+				instance = new ArticleController();
+				instance.frame = new EcranArticle();
+				instance.frame.setVisible(true);
 			}
 		});
 	}
@@ -31,7 +34,7 @@ public class ArticleController {
 	/*
 	 * instantiate CatalogManager and gets catalog of Articles List<Article>
 	 */
-	public ArticleController() {
+	private ArticleController() {
 		try {
 			manager = new CatalogueManager();
 			catalogue = manager.getCatalogue();
@@ -91,6 +94,9 @@ public class ArticleController {
 		// existante (si 10 articles déjà dans la liste - le dernièr index est 9 donc le
 		// nouveau sera 10)
 		// TODO connect Ecran
+		frame.afficherNouveau();
+		System.out.println(index);
+
 	}
 
 	/*
@@ -101,6 +107,15 @@ public class ArticleController {
 	 * article to catalog display the created article in Ecran
 	 */
 	public void enregister() {
+		// Here article is an instance of Article created in EcranArticle method getArticle() // EcranArticle -> BO
+		
+		Article article = frame.getArticle();
+		
+		// id can be null or existing in catalog
+		// if new Article (id = null) - save (index will be created in database)
+		// if existing article - get id and update
+				
+		frame.afficherArticle(article);
 
 	}
 	/*
