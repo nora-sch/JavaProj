@@ -22,11 +22,17 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import fr.eni.papeterie.bo.Article;
+import fr.eni.papeterie.bo.Ramette;
+import fr.eni.papeterie.bo.Stylo;
+
 public class EcranArticle extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	final int SIZE_TEXT = 25;
+	
+	private int idCurrent;
 
 	private JLabel lblReference, lblDesignation, lblMarque, lblStock, lblPrix, lblType, lblGrammage, lblCouleur;
 	private JTextField txtReference, txtMarque, txtStock, txtPrix;
@@ -60,11 +66,11 @@ public class EcranArticle extends JFrame implements ActionListener {
 		});
 	}
 
-	// constructeur
+	// constructor
 	public EcranArticle() {
 		this.setTitle("Article");
 		this.setSize(new Dimension(400, 400));
-//		this.setResizable(true);
+		//		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		initIHM();
 		pack();
@@ -82,9 +88,12 @@ public class EcranArticle extends JFrame implements ActionListener {
 		GridBagConstraints gbc = new GridBagConstraints();
 
 		// ajouter les composants graphiques au panel:
-		// définir l'emplacement (des coordonnées) d'un composant graphique7
+		// définir l'emplacement (des coordonnées) d'un composant graphique
 
 		gbc.insets = new Insets(5, 5, 5, 5); // spaces between the elements
+
+
+		// ============== place elements in GridBagLayout ==============
 		// Ligne 1
 		gbc.gridy = 0;
 		gbc.gridx = 0;
@@ -131,8 +140,8 @@ public class EcranArticle extends JFrame implements ActionListener {
 		panel.add(getLblType(), gbc);
 		gbc.gridx = 1;
 		panel.add(getPanType(), gbc);
-		
-		
+
+
 		// Ligne 7
 		gbc.gridy = 6;
 		gbc.gridx = 0;
@@ -145,7 +154,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 		boxGram.add(getCheckGrammage80());
 		boxGram.add(getCheckGrammage100());
 		panel.add(boxGram, gbc);
-		
+
 		// Ligne 8
 		gbc.gridy = 7;
 		gbc.gridx = 0;
@@ -166,7 +175,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 	}
 
 	// getters et setters
-
+	// ============== textfields section ==============
 	/**
 	 * @return the lblReference
 	 */
@@ -202,15 +211,15 @@ public class EcranArticle extends JFrame implements ActionListener {
 	 */
 	public JTextArea getTxtDesignation() {
 		if (txtDesignation == null) {
-//			txtDesignation = new JTextField(30);
-			txtDesignation = new JTextArea(1, SIZE_TEXT);
+			//			txtDesignation = new JTextField(30);
+			txtDesignation = new JTextArea(7, SIZE_TEXT);
 			txtDesignation.setWrapStyleWord(true);
 			txtDesignation.setLineWrap(true);
-//			Border border = BorderFactory.createLineBorder(Color.BLACK);
-//			txtDesignation.setBorder(BorderFactory.createCompoundBorder(border,
-//		            BorderFactory.createEmptyBorder(1, 1, 1, 1)
-//		            ));
-//			txtDesignation.getText().length();   // 250
+			//			Border border = BorderFactory.createLineBorder(Color.BLACK);
+			//			txtDesignation.setBorder(BorderFactory.createCompoundBorder(border,
+			//		            BorderFactory.createEmptyBorder(1, 1, 1, 1)
+			//		            ));
+			//			txtDesignation.getText().length();   // 250
 		}
 		return txtDesignation;
 	}
@@ -274,7 +283,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 		}
 		return txtPrix;
 	}
-
+	// ============== radio and checkbox section ==============
 	/**
 	 * @return the panType
 	 */
@@ -300,8 +309,6 @@ public class EcranArticle extends JFrame implements ActionListener {
 		}
 		return lblType;
 	}
-
-	JRadioButton jcb = new JRadioButton("A");
 
 	/**
 	 * @return the radioTypeRamette
@@ -334,11 +341,11 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 				@Override
 				public void actionPerformed(ActionEvent ev) {
-				
+
 					getCheckGrammage80().setEnabled(false);
 					getCheckGrammage100().setEnabled(false);
-//					getCheckGrammage80().setSelected(false);
-//					getCheckGrammage100().setSelected(false);
+					//					getCheckGrammage80().setSelected(false);
+					//					getCheckGrammage100().setSelected(false);
 					getComboCouleur().setEnabled(true);
 
 				}
@@ -393,12 +400,12 @@ public class EcranArticle extends JFrame implements ActionListener {
 	public JComboBox<String> getComboCouleur() {
 		if (comboCouleur == null) {
 			comboCouleur = new JComboBox<String>(couleurs);
-//			comboCouleur.setSize(new Dimension(320, 100));
+			//			comboCouleur.setSize(new Dimension(320, 100));
 		}
 		return comboCouleur;
 	}
 
-	// ==================================================================
+	// ============== button panel ==============
 	/**
 	 * @return the panBoutons
 	 */
@@ -421,7 +428,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 	 */
 	public JButton getBtnBack() {
 		if (btnBack == null) {
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Back24.gif"));
+			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Back24.gif"));
 			btnBack = new JButton(icon);
 			// adding ActionListener
 			btnBack.addActionListener(this);
@@ -482,12 +489,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 		return btnDelete;
 	}
 
-	
-	// ==================================================
-	public void afficherNouveau() {
-		// Par défaut un article est une rammette
-	}
-	// ==================================================
+	// ============== EVENT LISTENERS ===========
 	public void actionPerformed(ActionEvent ev) {
 		if (ev.getSource() == btnNew) {
 			txtReference.setText(null);
@@ -500,7 +502,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 		if (ev.getSource() == btnSave) {
 			// Stringbuffer error msg to show in JOptionPane.showMessageDialog(null, "xxxxxxxxxxxxx");
 			String reference = txtReference.getText().toString();// getting text of reference text field and storing it
-																	// in a String variable
+			// in a String variable
 			String designation = txtDesignation.getText().toString();
 			String marque = txtMarque.getText().toString();
 			int stock = Integer.parseInt(txtStock.getText());
@@ -524,4 +526,58 @@ public class EcranArticle extends JFrame implements ActionListener {
 
 	}
 
+	// ============== EXCHANGE WITH ARTICLE CONTROLLER ===========
+	/*
+	 * get article information from form
+	 * and instantiate new article // BO layer
+	 */
+	public Article getArticle() {
+		
+		Article article=null;
+		
+		if(getRadioTypeStylo().isSelected()){
+			article = new Stylo();
+		}else{
+			article = new Ramette();
+		}
+		try {
+			article.setIdArticle(idCurrent); // id  - null if new, id if from catalogue (ArticleController -> BLL / BLL -> ArticleController getCatalogue() -> EcranArticle.afficherArticle() )
+			article.setReference(getTxtReference().getText());
+			article.setMarque(getTxtMarque().getText());
+			article.setDesignation(getTxtDesignation().getText());
+			article.setPrixUnitaire(Float.parseFloat(getTxtPrix().getText()));
+			article.setQteStock(Integer.parseInt(getTxtStock().getText()));
+			if (getComboCouleur().isEnabled()) {
+				((Stylo)article).setCouleur( (String) getComboCouleur().getSelectedItem());
+			} else {
+				((Ramette) article).setGrammage(getCheckGrammage80().isSelected()?80:100);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return article;
+	}
+
+	/*
+	 * display the empty form
+	 * where default new article (new instance) is Ramette // BO layer
+	 */
+	public void afficherNouveau() {
+		// Par défaut un article est une rammette
+	}
+
+	/*
+	 * display the article in form fields
+	 * BO layer, BLL layer via Controller -> CatalogueManager
+	 */
+	public void afficherArticle(Article article) {
+		// Par défaut un article est une rammette
+	}
+
+	/*
+	 * popup modal for display the errors
+	 */
+	public void infoErreur(String errorMessage) {
+		JOptionPane.showMessageDialog(EcranArticle.this, errorMessage, "", JOptionPane.ERROR_MESSAGE);
+	}
 }

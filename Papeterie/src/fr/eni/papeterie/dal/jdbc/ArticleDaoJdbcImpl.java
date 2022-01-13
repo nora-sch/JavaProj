@@ -333,8 +333,8 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 			stmt = con.prepareStatement(sql);
 			// TODO if is getById than:
 			stmt.setInt(1, idArticle);
-			int result = stmt.executeUpdate();
-			System.out.println("Number of deleted records: " + result);
+			int rowCount = stmt.executeUpdate();
+			System.out.println("Number of deleted records: " + rowCount);
 			System.out.println("Article with id: " + idArticle + " has been deleted");
 			// TODO else syso article with this id not exist BREAK
 		} catch (SQLException e) {

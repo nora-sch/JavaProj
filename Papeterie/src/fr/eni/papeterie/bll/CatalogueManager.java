@@ -48,7 +48,7 @@ public class CatalogueManager {
 				}
 
 			} catch (DALException e1) {
-				throw new BLLException("Article " + a + " has not been inserted in the database, because it is a duplicate! " + e1);
+				throw new BLLException("Article " + a + " has not been inserted in the database, because it is a duplicate! " , e1);
 						}
 
 			// ======================================================================== //
@@ -57,7 +57,7 @@ public class CatalogueManager {
 				validerArticle(a);
 				daoArticle.insert(a);
 			} catch (DALException e) {
-				throw new BLLException("Article " + a + " has not been inserted in the database! " + e);
+				throw new BLLException("Article " + a + " has not been inserted in the database! ", e);
 			}
 		}
 	}
@@ -67,16 +67,16 @@ public class CatalogueManager {
 			validerArticle(a);
 			daoArticle.update(a);
 		} catch (DALException e) {
-			throw new BLLException("Article " + a + " has not been updated! " + e);
+			throw new BLLException("Article " + a + " has not been updated! ", e);
 		}
 	}
 
 	public void removeArticle(Article a) throws BLLException {
 		try {
-			validerArticle(a);
+//			validerArticle(a);
 			daoArticle.delete(a.getIdArticle());
 		} catch (DALException e) {
-			throw new BLLException("Article " + a + " couldn't be deleted! " + e);
+			throw new BLLException("Article " + a + " couldn't be deleted! ", e);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class CatalogueManager {
 		try {
 			list = daoArticle.selectAll();
 		} catch (DALException e) {
-			throw new BLLException("List of the articles couldn't be found! " + e);
+			throw new BLLException("List of the articles couldn't be found! ", e);
 		}
 		return list;
 	}
