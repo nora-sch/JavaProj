@@ -325,7 +325,7 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 	 * 
 	 * @return void
 	 */
-	public void delete(int idArticle) throws DALException {
+	public void deleteById(int idArticle) throws DALException {
 		String sql = "DELETE FROM Articles WHERE idArticle = ?";
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -455,17 +455,118 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 		}
 	}
 
+
+
 	@Override
-	public List<Article> selectByMarque() throws DALException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Article> selectByMarque(String marque) throws DALException {
+		List<Article> articles = new ArrayList<Article>();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+
+		try {
+			String sql = "SELECT * FROM Articles WHERE marque = ?";
+			con = JdbcTools.getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, marque);
+			result = stmt.executeQuery();
+			Article a = null;
+			while (result.next()) {
+				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
+					a = new Stylo(result.getInt("idArticle"), result.getString("reference").trim(),
+							result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getString("couleur"));
+				}
+				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
+					a = new Ramette(result.getInt("idArticle"), result.getString("reference").trim(),
+							result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getInt("grammage"));
+				}
+				articles.add(a);
+			}
+		} catch (SQLException e) {
+			throw new DALException("Article not found ", e);
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				JdbcTools.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return articles;
+		
 	}
 
 	@Override
-	public List<Article> selectByMotCle() throws DALException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Article> selectByMotCle(String motCle) throws DALException {
+		List<Article> articles = new ArrayList<Article>();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+
+		try {
+			String sql = "SELECT * FROM Articles WHERE marque like ? or designation like ?";
+			con = JdbcTools.getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, motCle);
+			result = stmt.executeQuery();
+			Article a = null;
+			while (result.next()) {
+				if (TYPE_STYLO.equalsIgnoreCase(result.getString("type").trim())) {
+					a = new Stylo(result.getInt("idArticle"), result.getString("reference").trim(),
+							result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getString("couleur"));
+				}
+				if (TYPE_RAMETTE.equalsIgnoreCase(result.getString("type").trim())) {
+					a = new Ramette(result.getInt("idArticle"), result.getString("reference").trim(),
+							result.getString("marque"), result.getString("designation"),
+							result.getFloat("prixUnitaire"), result.getInt("qteStock"), result.getInt("grammage"));
+				}
+				articles.add(a);
+			}
+		} catch (SQLException e) {
+			throw new DALException("Article not found ", e);
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				JdbcTools.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return articles;
 	}
+
+
 	
 	
 	

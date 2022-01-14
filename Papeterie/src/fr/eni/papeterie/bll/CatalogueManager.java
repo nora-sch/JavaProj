@@ -74,7 +74,7 @@ public class CatalogueManager {
 	public void removeArticle(Article a) throws BLLException {
 		try {
 //			validerArticle(a);
-			daoArticle.delete(a.getIdArticle());
+			daoArticle.deleteById(a.getIdArticle());
 		} catch (DALException e) {
 			throw new BLLException("Article " + a + " couldn't be deleted! ", e);
 		}

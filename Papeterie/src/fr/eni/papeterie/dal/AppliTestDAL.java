@@ -52,7 +52,7 @@ public class AppliTestDAL {
 			
 			//Suppression d'un article
 			System.out.println("Suppression de l'article  : " + a1.toString());
-			articleDAO.delete(a1.getIdArticle());
+			articleDAO.deleteById(a1.getIdArticle());
 			articles = articleDAO.selectAll();
 			System.out.println("Liste des articles après suppression : "  );
 			StringBuffer sb = new StringBuffer();
