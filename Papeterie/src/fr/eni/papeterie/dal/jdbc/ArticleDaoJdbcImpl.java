@@ -15,6 +15,7 @@ import fr.eni.papeterie.bo.Ramette;
 import fr.eni.papeterie.bo.Stylo;
 import fr.eni.papeterie.dal.ArticleDAO;
 import fr.eni.papeterie.dal.DALException;
+import fr.eni.papeterie.dal.DAO;
 
 public class ArticleDaoJdbcImpl implements ArticleDAO {
 	private static final String TYPE_STYLO = "STYLO";
@@ -453,5 +454,20 @@ public class ArticleDaoJdbcImpl implements ArticleDAO {
 			}
 		}
 	}
+
+	@Override
+	public List<Article> selectByMarque() throws DALException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Article> selectByMotCle() throws DALException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	
 
 }

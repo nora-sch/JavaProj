@@ -163,13 +163,25 @@ public class ArticleController {
 	 * by its index
 	 */
 	public void suprimer() {
-		try {
-			manager.removeArticle(catalogue.get(index));
-			catalogue.remove(index);
-		} catch (BLLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println(index);
+		System.out.println(catalogue.size()-1);
+//		if(index >= 0 && index < catalogue.size()) {
+			try {
+				manager.removeArticle(catalogue.get(index));
+				catalogue.remove(index);
+				
+				//TODO REFAIRE
+				if(index == catalogue.size()-1) {
+					frame.afficherArticle( catalogue.get(index));
+				}else if(index>0 && index < catalogue.size()-1 ) {
+					frame.afficherArticle(catalogue.get(index--));
+				}else{
+					frame.afficherNouveau();
+				}
+			} catch (BLLException e) {
+				e.printStackTrace();
+			}
+//		}
 	}
 
 	public int getFirstId() {

@@ -1,6 +1,5 @@
 package fr.eni.papeterie.ihm;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
@@ -432,6 +431,13 @@ public class EcranArticle extends JFrame implements ActionListener {
 		if (btnBack == null) {
 			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Back24.gif"));
 			btnBack = new JButton(icon);
+			
+//			if(idCurrent==null || idCurrent == ArticleController.getInstance().getFirstId()) {
+//				btnBack.setEnabled(false);
+//			} else {
+//				btnBack.setEnabled(true);
+//			}
+				
 			// adding ActionListener
 			btnBack.addActionListener(this);
 
@@ -446,6 +452,11 @@ public class EcranArticle extends JFrame implements ActionListener {
 		if (btnForw == null) {
 			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Forward24.gif"));
 			btnForw = new JButton(icon);
+//			if(idCurrent==null || idCurrent == ArticleController.getInstance().getLastId()) {
+//				btnForw.setEnabled(false);
+//			}else {
+//				btnForw.setEnabled(true);
+//			}
 			// adding ActionListener
 			btnForw.addActionListener(this);
 		}
@@ -498,22 +509,40 @@ public class EcranArticle extends JFrame implements ActionListener {
 			// afficherArticle() using article from catalog (BO);
 			ArticleController.getInstance().precedent();
 			System.out.println(ArticleController.getInstance().getFirstId());
-			if(idCurrent==ArticleController.getInstance().getFirstId()) {
-				panBoutons.remove(btnBack);
-			}else {
-				panBoutons.add(btnForw);
+
+			//// TODO REFAIRE :
+//			if(idCurrent==ArticleController.getInstance().getFirstId()) {
+////				panBoutons.remove(btnBack);
+////				panBoutons.add(btnForw);
+//			}else {
+////				panBoutons.add(btnForw);
+//			}
+			
+			if(idCurrent==null || idCurrent == ArticleController.getInstance().getFirstId()) {
+				btnBack.setEnabled(false);
+				btnForw.setEnabled(true);
+			} else {
+				btnBack.setEnabled(true);
 			}
 		}
-		
+
 		if (ev.getSource() == btnForw) {
 			// call to Controller method suivant() what will use method from EcranArticle
 			// afficherArticle() using article from catalog (BO);
 			ArticleController.getInstance().suivant();
 			System.out.println(ArticleController.getInstance().getLastId());
-			if(idCurrent==ArticleController.getInstance().getLastId()){
-				panBoutons.remove(btnForw);
+			//// TODO REFAIRE :
+//			if(idCurrent==ArticleController.getInstance().getLastId()){
+////				panBoutons.remove(btnForw);
+////				panBoutons.add(btnBack);
+//			}else {
+////				panBoutons.add(btnBack);
+//			}
+			if(idCurrent==null || idCurrent == ArticleController.getInstance().getLastId()) {
+				btnForw.setEnabled(false);
+				btnBack.setEnabled(true);
 			}else {
-				panBoutons.add(btnBack);
+				btnForw.setEnabled(true);
 			}
 		}
 		if (ev.getSource() == btnNew) {
