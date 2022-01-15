@@ -431,16 +431,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 		if (btnBack == null) {
 			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Back24.gif"));
 			btnBack = new JButton(icon);
-			
-//			if(idCurrent==null || idCurrent == ArticleController.getInstance().getFirstId()) {
-//				btnBack.setEnabled(false);
-//			} else {
-//				btnBack.setEnabled(true);
-//			}
-				
-			// adding ActionListener
 			btnBack.addActionListener(this);
-
 		}
 		return btnBack;
 	}
@@ -452,12 +443,6 @@ public class EcranArticle extends JFrame implements ActionListener {
 		if (btnForw == null) {
 			ImageIcon icon = new ImageIcon(this.getClass().getResource("img/Forward24.gif"));
 			btnForw = new JButton(icon);
-//			if(idCurrent==null || idCurrent == ArticleController.getInstance().getLastId()) {
-//				btnForw.setEnabled(false);
-//			}else {
-//				btnForw.setEnabled(true);
-//			}
-			// adding ActionListener
 			btnForw.addActionListener(this);
 		}
 		return btnForw;
@@ -508,47 +493,18 @@ public class EcranArticle extends JFrame implements ActionListener {
 			// call to Controller method precedent() what will use method from EcranArticle
 			// afficherArticle() using article from catalog (BO);
 			ArticleController.getInstance().precedent();
-			System.out.println(ArticleController.getInstance().getFirstId());
-
-			//// TODO REFAIRE :
-//			if(idCurrent==ArticleController.getInstance().getFirstId()) {
-////				panBoutons.remove(btnBack);
-////				panBoutons.add(btnForw);
-//			}else {
-////				panBoutons.add(btnForw);
-//			}
-			
-			if(idCurrent==null || idCurrent == ArticleController.getInstance().getFirstId()) {
-				btnBack.setEnabled(false);
-				btnForw.setEnabled(true);
-			} else {
-				btnBack.setEnabled(true);
-			}
 		}
 
 		if (ev.getSource() == btnForw) {
 			// call to Controller method suivant() what will use method from EcranArticle
 			// afficherArticle() using article from catalog (BO);
 			ArticleController.getInstance().suivant();
-			System.out.println(ArticleController.getInstance().getLastId());
-			//// TODO REFAIRE :
-//			if(idCurrent==ArticleController.getInstance().getLastId()){
-////				panBoutons.remove(btnForw);
-////				panBoutons.add(btnBack);
-//			}else {
-////				panBoutons.add(btnBack);
-//			}
-			if(idCurrent==null || idCurrent == ArticleController.getInstance().getLastId()) {
-				btnForw.setEnabled(false);
-				btnBack.setEnabled(true);
-			}else {
-				btnForw.setEnabled(true);
-			}
 		}
 		if (ev.getSource() == btnNew) {
 
 			// call to Controller method nouveau() what will use method afficherNouveau() of this EcranArticle
 			// afficherNouveau() and create new index which will be saved on Save button listener action (method enregister() of Controller);
+
 			ArticleController.getInstance().nouveau();
 		}
 
@@ -606,6 +562,10 @@ public class EcranArticle extends JFrame implements ActionListener {
 		checkGrammage100.setEnabled(false);
 		comboCouleur.setSelectedItem(null);
 		comboCouleur.setEnabled(false);
+		// disable buttons
+		btnForw.setEnabled(false);
+		btnBack.setEnabled(false);
+
 	}
 	/*
 	 * display the article in form fields
@@ -625,9 +585,7 @@ public class EcranArticle extends JFrame implements ActionListener {
 			getRadioTypeStylo().setEnabled(false);
 			getRadioTypeRamette().setSelected(false);
 			getRadioTypeRamette().setEnabled(false);
-			//			getCheckGrammage80().setEnabled(false);
-			//			getCheckGrammage100().setEnabled(false);
-			//			groupGram.clearSelection();
+
 			getCheckGrammage80().setSelected(false);
 			getCheckGrammage100().setSelected(false);
 			getComboCouleur().setEnabled(true);
@@ -649,8 +607,25 @@ public class EcranArticle extends JFrame implements ActionListener {
 			getComboCouleur().setEnabled(false);
 			getComboCouleur().setSelectedItem(null);
 		}
-
-
+		System.out.println("aff first -"+ArticleController.getInstance().isFirst());
+		System.out.println("aff last -"+ArticleController.getInstance().isLast());
+		System.out.println("aff index -"+ArticleController.getInstance().getCatIndex());
+		// enable/disable buttons
+		if(ArticleController.getInstance().isLast() && ArticleController.getInstance().isFirst()==false) {
+			btnForw.setEnabled(false);
+			btnBack.setEnabled(true);
+		}
+		else if(ArticleController.getInstance().isFirst() && ArticleController.getInstance().isLast()==false) {
+			btnForw.setEnabled(true);
+			btnBack.setEnabled(false);
+		}
+		else if (ArticleController.getInstance().isFirst() && ArticleController.getInstance().isLast()){
+			btnForw.setEnabled(false);
+			btnBack.setEnabled(false);
+		}else {
+			btnForw.setEnabled(true);
+			btnBack.setEnabled(true);
+		}
 	}
 	/*
 	 * get article information from form

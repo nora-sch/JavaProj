@@ -11,7 +11,7 @@ import fr.eni.papeterie.bo.Article;
 public class ArticleController {
 	private CatalogueManager manager;
 	private List<Article> catalogue;
-	private int index; // index of Article in catalogu (List) not db!
+	private int index; // index of Article in catalog (List) not db!
 
 	private EcranArticle frame ;
 
@@ -69,6 +69,7 @@ public class ArticleController {
 	public void first() {
 		if(catalogue.size()>0) {
 			Article article = catalogue.get(0); // get first article from catalog List
+			index = 0;
 			System.out.println(article);
 			// TODO connect Ecran
 			frame.afficherArticle(article);
@@ -84,7 +85,7 @@ public class ArticleController {
 			index--;
 			Article article = catalogue.get(index); // récupére l'article de la liste Article (catalogue) par son index
 			frame.afficherArticle(article);
-		}
+			}
 
 	}
 
@@ -105,12 +106,12 @@ public class ArticleController {
 	 * display new article parameters in Ecran
 	 */
 	public void nouveau() {
-		index = catalogue.size(); // le nouveau index pour nouveau article est un nombre de la taille de liste
+		//		index = catalogue.size(); // le nouveau index pour nouveau article est un nombre de la taille de liste
 		// existante (si 10 articles déjà dans la liste - le dernièr index est 9 donc le
 		// nouveau sera 10)
-
+		index = -1; // index for new Article which is not saved in the list and it can't be deleted
 		frame.afficherNouveau();
-		System.out.println(index);
+		System.out.println("new index in catalog: "+index);
 
 	}
 
@@ -135,8 +136,10 @@ public class ArticleController {
 				manager.addArticle(article);
 				// save to list
 				catalogue.add(article);
+				index = catalogue.size()-1;
 				// display article
 				frame.afficherArticle(article);
+			
 			} catch (BLLException e) {
 				e.printStackTrace();
 			}
@@ -163,32 +166,48 @@ public class ArticleController {
 	 * by its index
 	 */
 	public void suprimer() {
-		System.out.println(index);
-		System.out.println(catalogue.size()-1);
-//		if(index >= 0 && index < catalogue.size()) {
+	
+		if(index >= 0 && index < catalogue.size()) {
 			try {
 				manager.removeArticle(catalogue.get(index));
 				catalogue.remove(index);
-				
+
 				//TODO REFAIRE
-				if(index == catalogue.size()-1) {
+				if(index < catalogue.size()) {
 					frame.afficherArticle( catalogue.get(index));
-				}else if(index>0 && index < catalogue.size()-1 ) {
-					frame.afficherArticle(catalogue.get(index--));
+				}else if(index == catalogue.size() && index !=0) {
+					frame.afficherArticle(catalogue.get(--index));
 				}else{
-					frame.afficherNouveau();
+					nouveau();
 				}
 			} catch (BLLException e) {
 				e.printStackTrace();
 			}
-//		}
+		}else {
+			first();
+		}
+
 	}
 
-	public int getFirstId() {
-		return	catalogue.get(0).getIdArticle();
+	// boolean indexCour est first ou last index
+	public boolean isFirst() {
+		//		return	catalogue.get(0).getIdArticle();
+		boolean ret = false;
+		if(index == 0) {
+			ret = true;
+		}
+		return ret;
 	}
-	public int getLastId() {
-		return	catalogue.get(catalogue.size()-1).getIdArticle();
+	public boolean isLast() {
+		//		return	catalogue.get(catalogue.size()-1).getIdArticle();4
+		boolean ret = false;
+		if(index == catalogue.size()-1) {
+			ret = true;
+		}
+		return ret;
+	}
+	public int getCatIndex() {
+		return index;
 	}
 
 }
